@@ -140,7 +140,7 @@ const TaskRouteHandler = {
         return res.send(
           createSuccessResponse({
             statusCode: 200,
-            message: "Successfullt Fetched All Tasks",
+            message: "Successfully Fetched All Tasks",
             status: "SUCCESS",
             data: response,
           })
@@ -159,7 +159,8 @@ const TaskRouteHandler = {
   },
 
   async getTaskById(req, res) {
-    const { taskId } = req.body;
+    const { taskId } = req.params;
+    console.log(req.params);
     if (!taskId) {
       return res.send(
         createErrorResponse({

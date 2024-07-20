@@ -19,6 +19,6 @@ taskRouter.patch("/update-status", TaskRouteHandler.changingStatus);
 taskRouter.get("/all", TaskRouteHandler.getAllTasks);
 
 //getting task by id
-taskRouter.get("/get-task", TaskRouteHandler.getTaskById);
+taskRouter.get("/get-task/:taskId", TaskRouteHandler.getTaskById);
 
 module.exports = taskRouter;
