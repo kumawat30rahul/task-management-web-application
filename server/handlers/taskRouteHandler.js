@@ -96,6 +96,42 @@ const TaskRouteHandler = {
       );
     }
   },
+
+  async changingStatus(req, res) {
+    const { taskId, taskStatus } = req.body;
+    if (!taskId || !taskStatus) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 400,
+          message: "Task Id and status are required",
+          status: "ERROR",
+          error: {},
+        })
+      );
+    }
+    try {
+      const response = await TaskManager.changeStatus({ taskId, taskStatus });
+      if (response) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Task Status Successfully Changed",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while changing task status",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
 };
 
 module.exports = TaskRouteHandler;

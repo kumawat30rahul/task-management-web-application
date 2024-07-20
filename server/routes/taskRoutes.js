@@ -12,4 +12,7 @@ taskRouter.patch("/edit", TaskRouteHandler.editingTask);
 //deleting task
 taskRouter.delete("/delete", TaskRouteHandler.deletingTask);
 
+//changing status of task
+taskRouter.patch("/update-status", TaskRouteHandler.changingStatus);
+
 module.exports = taskRouter;

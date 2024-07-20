@@ -9,6 +9,7 @@ const taskValidation = (body) => {
     updatedAt,
     updatedBy,
     updatedByUserId,
+    taskStatus,
   } = body;
   if (taskId) {
     if (!taskId) {

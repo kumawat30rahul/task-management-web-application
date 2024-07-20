@@ -15,6 +15,10 @@ const taskSchema = new mongoose.Schema({
   severity: {
     type: String,
   },
+  taskStatus: {
+    type: String,
+    default: "ASSIGNED",
+  },
   expiryDate: {
     type: String,
   },
