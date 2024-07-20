@@ -61,6 +61,17 @@ const TaskManager = {
       return Promise.reject(error);
     }
   },
+
+  async deleteTask(taskId) {
+    try {
+      console.log(taskId);
+      const task = await Task.deleteOne({ taskId });
+      console.log(task);
+      return Promise.resolve(task);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
 };
 
 module.exports = TaskManager;

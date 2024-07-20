@@ -9,4 +9,7 @@ taskRouter.post("/create", TaskRouteHandler.createTask);
 //editing task
 taskRouter.patch("/edit", TaskRouteHandler.editingTask);
 
+//deleting task
+taskRouter.delete("/delete", TaskRouteHandler.deletingTask);
+
 module.exports = taskRouter;

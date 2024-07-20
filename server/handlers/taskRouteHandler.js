@@ -1,6 +1,7 @@
 const {
   createSuccessResponse,
   createConnectionErrorResponse,
+  createErrorResponse,
 } = require("../utils/responseHandler");
 const TaskManager = require("../managers/TaskManager");
 const { taskValidation } = require("../utils/taskValidation");
@@ -55,6 +56,42 @@ const TaskRouteHandler = {
           message: "Something Went wrong while editing task",
           status: "ERROR",
           data: error,
+        })
+      );
+    }
+  },
+
+  async deletingTask(req, res) {
+    const { taskId } = req.body;
+    if (!taskId) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 400,
+          message: "Task Id is required",
+          status: "ERROR",
+          error: {},
+        })
+      );
+    }
+    try {
+      const response = await TaskManager.deleteTask(taskId);
+      if (response) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Task Successfully Deleted",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while deleting task",
+          status: "ERROR",
+          error: error,
         })
       );
     }
