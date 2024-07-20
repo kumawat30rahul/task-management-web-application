@@ -132,6 +132,67 @@ const TaskRouteHandler = {
       );
     }
   },
+
+  async getAllTasks(req, res) {
+    try {
+      const response = await TaskManager.getTasks();
+      if (response) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Successfullt Fetched All Tasks",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while fetching all tasks",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
+
+  async getTaskById(req, res) {
+    const { taskId } = req.body;
+    if (!taskId) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 400,
+          message: "Task Id is required",
+          status: "ERROR",
+          error: {},
+        })
+      );
+    }
+    try {
+      const response = await TaskManager.getTaskById(taskId);
+      if (response) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Successfully Fetched Task",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while fetching task",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
 };
 
 module.exports = TaskRouteHandler;

@@ -82,6 +82,24 @@ const TaskManager = {
       return Promise.reject(error);
     }
   },
+
+  async getTasks() {
+    try {
+      const task = await Task.find();
+      return Promise.resolve(task);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  async getTaskById(taskId) {
+    try {
+      const task = await Task.findOne({ taskId });
+      return Promise.resolve(task);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
 };
 
 module.exports = TaskManager;

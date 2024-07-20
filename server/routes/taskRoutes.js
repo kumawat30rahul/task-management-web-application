@@ -15,4 +15,10 @@ taskRouter.delete("/delete", TaskRouteHandler.deletingTask);
 //changing status of task
 taskRouter.patch("/update-status", TaskRouteHandler.changingStatus);
 
+//getting all tasks
+taskRouter.get("/all", TaskRouteHandler.getAllTasks);
+
+//getting task by id
+taskRouter.get("/get-task", TaskRouteHandler.getTaskById);
+
 module.exports = taskRouter;
