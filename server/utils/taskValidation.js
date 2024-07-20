@@ -1,7 +1,49 @@
 const { createErrorResponse } = require("./responseHandler");
 
-const createTaskValidation = (body) => {
-  const { taskName, createdByUserId, createdBy } = body;
+const taskValidation = (body) => {
+  const {
+    taskId,
+    taskName,
+    createdByUserId,
+    createdBy,
+    updatedAt,
+    updatedBy,
+    updatedByUserId,
+  } = body;
+  if (taskId) {
+    if (!taskId) {
+      return createErrorResponse({
+        statusCode: 400,
+        message: "Invalid Task Id",
+        status: "ERROR",
+        error: "Invalid request data",
+      });
+    }
+    if (!updatedByUserId) {
+      return createErrorResponse({
+        statusCode: 400,
+        message: "Invalid Updated User Id",
+        status: "ERROR",
+        error: "Invalid request data",
+      });
+    }
+    if (!updatedBy) {
+      return createErrorResponse({
+        statusCode: 400,
+        message: "Invalid Updated User Name",
+        status: "ERROR",
+        error: "Invalid request data",
+      });
+    }
+    if (!updatedAt) {
+      return createErrorResponse({
+        statusCode: 400,
+        message: "Invalid Updated Time",
+        status: "ERROR",
+        error: "Invalid request data",
+      });
+    }
+  }
   if (!taskName) {
     return createErrorResponse({
       statusCode: 400,
@@ -11,15 +53,7 @@ const createTaskValidation = (body) => {
     });
   }
 
-  if (!createdByUserId) {
-    return createErrorResponse({
-      statusCode: 400,
-      message: "Invalid Created User Id",
-      status: "ERROR",
-      error: "Invalid request data",
-    });
-  }
-  if (!createdBy) {
+  if (!createdBy && !taskId) {
     return createErrorResponse({
       statusCode: 400,
       message: "Invalid Created User Name",
@@ -27,7 +61,7 @@ const createTaskValidation = (body) => {
       error: "Invalid request data",
     });
   }
-  if (!createdByUserId) {
+  if (!createdByUserId && !taskId) {
     return createErrorResponse({
       statusCode: 400,
       message: "Invalid Created User Id",
@@ -37,4 +71,4 @@ const createTaskValidation = (body) => {
   }
 };
 
-module.exports = { createTaskValidation };
+module.exports = { taskValidation };

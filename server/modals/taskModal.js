@@ -26,6 +26,15 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  updatedAt: {
+    type: String,
+  },
+  updatedBy: {
+    type: String,
+  },
+  updatedByUserId: {
+    type: String,
+  },
   createdAt: {
     type: String,
     default: new Date(),
