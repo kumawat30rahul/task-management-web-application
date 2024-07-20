@@ -1,6 +1,7 @@
-import { createErrorResponse } from "./responseHandler";
+const { createErrorResponse } = require("./responseHandler");
 
-export const createTaskValidation = (taskName, createdByUserId, createdBy) => {
+const createTaskValidation = (body) => {
+  const { taskName, createdByUserId, createdBy } = body;
   if (!taskName) {
     return createErrorResponse({
       statusCode: 400,
@@ -35,3 +36,5 @@ export const createTaskValidation = (taskName, createdByUserId, createdBy) => {
     });
   }
 };
+
+module.exports = { createTaskValidation };

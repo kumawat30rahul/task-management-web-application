@@ -12,20 +12,24 @@ const TaskRouteHandler = {
     try {
       const response = await TaskManager.createTask(req.body);
       if (response) {
-        return createSuccessResponse({
-          statusCode: 200,
-          message: "Task Successfully Created",
-          status: "SUCCESS",
-          data: response,
-        });
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Task Successfully Created",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
       }
     } catch (error) {
-      return createConnectionErrorResponse({
-        statusCode: 500,
-        message: "Something Went wrong while creating task",
-        status: "ERROR",
-        data: error,
-      });
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while creating task",
+          status: "ERROR",
+          data: error,
+        })
+      );
     }
   },
 };
