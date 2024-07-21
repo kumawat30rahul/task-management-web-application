@@ -8,6 +8,9 @@ import {
 
 let envBaseUrl = config[import.meta.env.VITE_MY_ENV].backendUrl;
 
+console.log(import.meta.env.VITE_MY_ENV);
+console.log(envBaseUrl);
+
 const serviceList = {
   user: "/user",
   task: "/task",

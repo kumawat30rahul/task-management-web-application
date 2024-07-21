@@ -12,7 +12,12 @@ app.use(express.urlencoded({ extended: true })); //parse application/x-www-form-
 
 //cors
 const corsoptions = {
-  origin: ["http://localhost:5173/", "http://localhost:5173"], // restrict calls to those this address
+  origin: [
+    "http://localhost:5173/",
+    "http://localhost:5173",
+    "https://task-management-web-application-lime.vercel.app/",
+    "https://task-management-web-application-lime.vercel.app",
+  ], // restrict calls to those this address
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
   optionsSuccessStatus: 204,
