@@ -16,9 +16,9 @@ const Navbar = () => {
 
   const dialogContent = () => {
     return (
-      <div>
+      <div className="flex flex-col items-start">
         <span>Are you sure you want to logout?</span>
-        <div className="flex items-center justify-end w-full gap-2">
+        <div className="flex items-center justify-start md:justify-end w-full gap-2 mt-2">
           <Button className="bg-blue-500" onClick={handleLogout}>
             Yes
           </Button>

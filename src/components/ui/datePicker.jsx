@@ -31,7 +31,7 @@ export function DatePicker({ setTasksDetails, tasksDetails }) {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal border-gray-500",
+            "w-full md:w-[280px] justify-start text-left font-normal border-gray-500",
             !date && "text-muted-foreground"
           )}
         >

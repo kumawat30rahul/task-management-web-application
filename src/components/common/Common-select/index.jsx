@@ -25,7 +25,7 @@ const SelectCommon = ({
         onValueChange={handleChange}
         defaultValue={tasksDetails?.taskSeverity}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="w-full md:w-[180px]">
           <SelectValue placeholder={defaultPlaceHolder} />
         </SelectTrigger>
         <SelectContent>

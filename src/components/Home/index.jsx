@@ -77,7 +77,7 @@ const HomePage = () => {
     if (taskType === "Add" || taskType === "Edit") {
       return (
         <div className="flex flex-col items-start justify-start gap-3 w-full">
-          <div className="w-full">
+          <div className="w-full flex flex-col items-start">
             <label htmlFor="name">Title</label>
             <Input
               placeholder="Type Here..."
@@ -87,7 +87,7 @@ const HomePage = () => {
               onChange={(e) => taskDetailsHandler(e.target.value, "taskName")}
             />
           </div>
-          <div className="w-full">
+          <div className="w-full flex flex-col items-start">
             <label htmlFor="desc">Task Description</label>
             <Input
               placeholder="Type Here..."
@@ -97,8 +97,8 @@ const HomePage = () => {
               onChange={(e) => taskDetailsHandler(e.target.value, "taskDesc")}
             />
           </div>
-          <div className="flex items-center justify-between gap-2">
-            <div>
+          <div className="flex flex-col md:flex-row items-center justify-between gap-2 w-full">
+            <div className="w-full">
               <SelectCommon
                 defaultPlaceHolder="Severity"
                 options={severityOptions}
@@ -106,7 +106,7 @@ const HomePage = () => {
                 tasksDetails={tasksDetails}
               />
             </div>
-            <div>
+            <div className="w-full">
               <DatePicker
                 setTasksDetails={setTasksDetails}
                 tasksDetails={tasksDetails}
@@ -137,20 +137,20 @@ const HomePage = () => {
     } else if (taskType === "View") {
       return (
         <div className="flex flex-col gap-3 mt-3">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-start">
             <span>Title</span>
             <span className="text-xl font-bold text-black">
               {tasksDetails?.taskName || "NA"}
             </span>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col items-start">
             <span>Description</span>
-            <span className="text-lg text-black">
+            <span className="text-lg text-black text-start">
               {tasksDetails?.taskDescription || "NA"}
             </span>
           </div>
           <div className="flex items-start justify-between">
-            <div className="flex flex-col">
+            <div className="flex flex-col items-start">
               <span>Created At</span>
               <span className="text-lg text-black">
                 {dateFormater(
@@ -172,9 +172,11 @@ const HomePage = () => {
       );
     } else if (taskType === "Delete") {
       return (
-        <div>
-          <span>Are you sure you want to delete this task?</span>
-          <div className="flex items-center justify-end gap-2">
+        <div className="flex flex-col items-start relativ">
+          <span className="text-start">
+            Are you sure you want to delete this task?
+          </span>
+          <div className="flex items-center justify-start md:justify-end gap-2 mt-4 w-full">
             <Button className="bg-red-500 w-max" onClick={deleteTaskFunction}>
               Yes
             </Button>
@@ -246,8 +248,6 @@ const HomePage = () => {
     }
   }, [taskType]);
 
-  console.log({ tasksDetails }, { taskType });
-
   return (
     <>
       <Navbar />
@@ -260,7 +260,9 @@ const HomePage = () => {
                 ? "Add Task"
                 : taskType === "View"
                 ? "Task Details"
-                : "Edit Task"
+                : taskType === "Edit"
+                ? "Edit Task"
+                : "Delete Task"
             }`}
             isOpen={isOpen}
             setIsOpen={() => {
