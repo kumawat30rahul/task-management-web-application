@@ -15,8 +15,8 @@ const corsoptions = {
   origin: [
     "http://localhost:5173/",
     "http://localhost:5173",
-    "https://task-management-web-application-23jvcwu3r.vercel.app/",
-    "https://task-management-web-application-23jvcwu3r.vercel.app",
+    "https://tast-management-application.vercel.app/",
+    "https://tast-management-application.vercel.app",
   ], // restrict calls to those this address
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   preflightContinue: false,
