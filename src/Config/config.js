@@ -4,7 +4,7 @@ const config = {
   },
   prod: {
     backendUrl:
-      "https://task-management-web-application-9pqe-ka88n8d2u.vercel.app/",
+      "https://task-management-web-application-9pqe-ka88n8d2u.vercel.app",
   },
 };
 
