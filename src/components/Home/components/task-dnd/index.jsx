@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import TaskCard from "../task-card";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
-import { getAllTasks } from "@/Config/services";
+import { getAllTasks, updateTaskStatus } from "@/Config/services";
 
 let initialData = {
   tasks: {},
@@ -28,8 +28,13 @@ let initialData = {
 
 const TaskDragAndDrop = () => {
   const [state, setState] = useState(initialData);
+  const [updateTaskStatusLoader, setUpdateTaskStatusLoader] = useState({
+    loader: false,
+    taksId: "",
+  });
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
+
     //if user drops the task outside the droppable area
     if (!destination) return;
 
@@ -65,9 +70,8 @@ const TaskDragAndDrop = () => {
 
     //if user drops the task in the different droppable area
     const start = state.columns[source.droppableId];
-    console.log(start, "start");
     const finish = state.columns[destination.droppableId];
-    console.log(finish, "finish");
+
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -90,6 +94,7 @@ const TaskDragAndDrop = () => {
       },
     };
     setState(newState);
+    updatingStatus(draggableId, destination.droppableId);
   };
 
   const fetchingAllTasks = async () => {
@@ -109,7 +114,6 @@ const TaskDragAndDrop = () => {
       }, {});
 
       const sepearatedColumnId = seperatingTasks(response?.data);
-      console.log(sepearatedColumnId, "sepearatedColumnId");
       const newInitialData = {
         ...initialData,
         tasks: allTasks,
@@ -138,9 +142,8 @@ const TaskDragAndDrop = () => {
 
   const seperatingTasks = (allTasks) => {
     const todoTasks = allTasks
-      ?.filter((task) => task?.taskStatus === "ASSIGNED")
+      ?.filter((task) => task?.taskStatus === "TODO")
       .map((task) => task?.taskId);
-    console.log(todoTasks, "todoTasks");
     const inprogressTasks = allTasks
       ?.filter((task) => task?.taskStatus === "INPROGRESS")
       .map((task) => task.taskId);
@@ -148,12 +151,31 @@ const TaskDragAndDrop = () => {
       ?.filter((task) => task?.taskStatus === "CLOSED")
       .map((task) => task.taskId);
 
-    console.log({ todoTasks, inprogressTasks, closedTasks }, "seperatedTasks");
     return {
       TODO: todoTasks,
       INPROGRESS: inprogressTasks,
       CLOSED: closedTasks,
     };
+  };
+
+  const updatingStatus = async (taskId, status) => {
+    try {
+      setUpdateTaskStatusLoader({
+        loader: true,
+        taksId: taskId,
+      });
+      const payload = {
+        taskId,
+        taskStatus: status,
+      };
+      await updateTaskStatus(payload);
+      setUpdateTaskStatusLoader({
+        loader: false,
+        taksId: "",
+      });
+    } catch (error) {
+      alert(error);
+    }
   };
 
   useEffect(() => {
@@ -185,16 +207,23 @@ const TaskDragAndDrop = () => {
                             index={index}
                             key={task.id}
                           >
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                key={task.id}
-                              >
-                                <TaskCard task={task} />
-                              </div>
-                            )}
+                            {(provided, snapshot) => {
+                              return (
+                                <div
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  key={task.id}
+                                >
+                                  <TaskCard
+                                    task={task}
+                                    updateTaskStatusLoader={
+                                      updateTaskStatusLoader
+                                    }
+                                  />
+                                </div>
+                              );
+                            }}
                           </Draggable>
                         ))}
                       </div>

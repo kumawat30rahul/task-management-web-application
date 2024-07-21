@@ -1,5 +1,5 @@
 import config from "./config";
-import { getRequest, postRequest } from "./servicesHeaders";
+import { getRequest, patchRequest, postRequest } from "./servicesHeaders";
 
 let envBaseUrl = config[import.meta.env.VITE_MY_ENV].backendUrl;
 
@@ -21,4 +21,9 @@ export const loginUser = async (payload) => {
 export const getAllTasks = async () => {
   const url = envBaseUrl + serviceList.task + `/all`;
   return getRequest(url);
+};
+
+export const updateTaskStatus = async (payload) => {
+  const url = envBaseUrl + serviceList.task + `/update-status`;
+  return patchRequest(url, payload);
 };

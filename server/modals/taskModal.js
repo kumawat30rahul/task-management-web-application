@@ -17,7 +17,7 @@ const taskSchema = new mongoose.Schema({
   },
   taskStatus: {
     type: String,
-    default: "ASSIGNED",
+    default: "TODO",
   },
   expiryDate: {
     type: String,
