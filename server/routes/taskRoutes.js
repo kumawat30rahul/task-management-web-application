@@ -21,4 +21,7 @@ taskRouter.get("/all", TaskRouteHandler.getAllTasks);
 //getting task by id //
 taskRouter.get("/get-task/:taskId", TaskRouteHandler.getTaskById);
 
+//searching task by name
+taskRouter.get("/search", TaskRouteHandler.searchTask);
+
 module.exports = taskRouter;

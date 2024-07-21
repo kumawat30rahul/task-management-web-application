@@ -100,6 +100,15 @@ const TaskManager = {
       return Promise.reject(error);
     }
   },
+
+  async searchTask(taskName) {
+    try {
+      const task = await Task.find({ taskName: { $regex: taskName } });
+      return Promise.resolve(task);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
 };
 
 module.exports = TaskManager;

@@ -160,7 +160,6 @@ const TaskRouteHandler = {
 
   async getTaskById(req, res) {
     const { taskId } = req.params;
-    console.log(req.params);
     if (!taskId) {
       return res.send(
         createErrorResponse({
@@ -173,6 +172,42 @@ const TaskRouteHandler = {
     }
     try {
       const response = await TaskManager.getTaskById(taskId);
+      if (response) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Successfully Fetched Task",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while fetching task",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
+
+  async getTaskBySearch(req, res) {
+    const { taskName } = req.query;
+    if (!taskName) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 400,
+          message: "Task Name is required",
+          status: "ERROR",
+          error: {},
+        })
+      );
+    }
+    try {
+      const response = await TaskManager.searchTask(taskName);
       if (response) {
         return res.send(
           createSuccessResponse({
