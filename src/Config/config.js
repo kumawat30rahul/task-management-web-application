@@ -3,7 +3,7 @@ const config = {
     backendUrl: "http://localhost:3000",
   },
   prod: {
-    backendUrl: "task-managemend-backend.vercel.app",
+    backendUrl: "https://task-managemend-backend.vercel.app",
   },
 };
 
