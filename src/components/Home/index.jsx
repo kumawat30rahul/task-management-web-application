@@ -7,7 +7,7 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { DatePicker } from "../ui/datePicker";
 import TaskDragAndDrop from "./components/task-dnd";
-import { createTask, getTaskById } from "@/Config/services";
+import { createTask, editTask, getTaskById } from "@/Config/services";
 import { CircularProgress } from "@mui/material";
 
 const HomePage = () => {
@@ -67,8 +67,6 @@ const HomePage = () => {
     setIsOpen(false);
   };
 
-  console.log({ tasksDetails });
-
   const dialogContent = () => {
     if (taskType === "Add" || taskType === "Edit") {
       return (
@@ -87,7 +85,7 @@ const HomePage = () => {
             <label htmlFor="desc">Task Description</label>
             <Input
               placeholder="Type Here..."
-              value={tasksDetails?.taskDesc}
+              value={tasksDetails?.taskDescription}
               name="desc"
               className="custom-input"
               onChange={(e) => taskDetailsHandler(e.target.value, "taskDesc")}
@@ -106,7 +104,12 @@ const HomePage = () => {
             </div>
           </div>
           <div>
-            <Button className="bg-blue-500" onClick={createTaskFunction}>
+            <Button
+              className="bg-blue-500"
+              onClick={
+                taskType === "Edit" ? editingTaskFunction : createTaskFunction
+              }
+            >
               {taskCreationLoader ? (
                 <CircularProgress
                   size={18}
@@ -149,7 +152,9 @@ const HomePage = () => {
               </span>
             </div>
           </div>
-          <Button className="bg-blue-500 w-max">Close</Button>
+          <Button className="bg-blue-500 w-max" onClick={handleClose}>
+            Close
+          </Button>
         </div>
       );
     } else if (taskType === "Delete") {
@@ -173,7 +178,7 @@ const HomePage = () => {
       const res = response?.data;
       setTasksDetails({
         taskName: res?.taskName,
-        taskDesc: res?.taskDesc,
+        taskDescription: res?.taskDescription,
         taskSeverity: res?.severity,
         expiryDate: res?.expiryDate,
         createdAt: res?.createdAt,
@@ -181,6 +186,30 @@ const HomePage = () => {
       setIsOpen(true);
     } catch (error) {
       alert(error);
+    }
+  };
+  const editingTaskFunction = async () => {
+    setTaskCreationLoader(true);
+    try {
+      const payload = {
+        taskId,
+        taskName: tasksDetails?.taskName,
+        taskDescription: tasksDetails?.taskDesc,
+        severity: tasksDetails?.taskSeverity,
+        expiryDate: tasksDetails?.expiryDate,
+        updatedAt: new Date(),
+        updatedBy: userName,
+        updatedByUserId: userDetails?.userId,
+      };
+
+      const response = await editTask(payload);
+      setTaskCreationLoader(false);
+      setFetchTasksAgain(true);
+      setTaskType("");
+      setIsOpen(false);
+    } catch (error) {
+      alert(error);
+      setTaskCreationLoader(false);
     }
   };
 

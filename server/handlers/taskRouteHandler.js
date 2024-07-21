@@ -35,6 +35,7 @@ const TaskRouteHandler = {
   },
 
   async editingTask(req, res) {
+    console.log(req.body);
     const isTaskValid = taskValidation(req.body);
     if (isTaskValid) return res.send(isTaskValid);
     try {

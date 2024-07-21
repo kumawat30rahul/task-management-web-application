@@ -203,7 +203,7 @@ const TaskDragAndDrop = ({
                 (taskId) => state.tasks[taskId]
               );
               return (
-                <Grid item lg={4} md={4} sm={12} xs={12} className="h-full">
+                <Grid item lg={4} md={6} sm={12} xs={12} className="h-full">
                   <div className="flex flex-col items-center justify-start gap-2 border border-gray-500 bg-gray-500/20 h-full">
                     <span className="h-auto w-full bg-blue-500 text-center text-white font-bold">
                       {column?.title}

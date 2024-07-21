@@ -16,7 +16,7 @@ const TaskManager = {
       const task = new Task({
         taskId: taskId,
         taskName: taskName,
-        taskDesc: taskDescription,
+        taskDescription: taskDescription,
         severity: severity,
         expiryDate: expiryDate,
         createdBy: createdBy,
@@ -46,7 +46,7 @@ const TaskManager = {
         updatedAt: new Date(),
       };
       if (taskName) updateFields.taskName = taskName;
-      if (taskDescription) updateFields.taskDesc = taskDescription;
+      if (taskDescription) updateFields.taskDescription = taskDescription;
       if (severity) updateFields.severity = severity;
       if (expiryDate) updateFields.expiryDate = expiryDate;
       if (updatedAt) updateFields.updatedAt = updatedAt;

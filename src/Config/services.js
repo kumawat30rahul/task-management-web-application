@@ -37,3 +37,8 @@ export const getTaskById = async (taskId) => {
   const url = envBaseUrl + serviceList.task + `/get-task/${taskId}`;
   return getRequest(url);
 };
+
+export const editTask = async (payload) => {
+  const url = envBaseUrl + serviceList.task + `/edit`;
+  return patchRequest(url, payload);
+};

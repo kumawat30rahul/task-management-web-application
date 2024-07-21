@@ -35,13 +35,21 @@ const TaskCard = ({
         <>
           <div className="flex flex-col items-start gap-2">
             <span className="text-xl font-bold">{task?.taskName || "NA"}</span>
-            <span className="text-md">{task?.taskDesc || "NA"}</span>
+            <span className="text-md">{task?.taskDescription || "NA"}</span>
             <span className="text-xs text-gray-500">
               {format(task?.createdAt, "dd MMMM yyyy, hh:mm a")}
             </span>
           </div>
           <div className="w-full flex items-center justify-between mt-2">
-            <span className="custom-severity-todo">
+            <span
+              className={`${
+                task?.severity === "Low"
+                  ? "custom-severity-low"
+                  : task?.severity === "Medium"
+                  ? "custom-severity-medium"
+                  : "custom-severity-high"
+              }`}
+            >
               {task?.severity || "NA"}
             </span>
             <span className="text-xs">
