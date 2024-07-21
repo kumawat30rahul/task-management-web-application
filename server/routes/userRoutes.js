@@ -12,4 +12,7 @@ userRouter.post("/login", UserRouteHandler.loginUser);
 //google login
 userRouter.post("/google-login", UserRouteHandler.googleLogin);
 
+//get user by id
+userRouter.get("/:userId", UserRouteHandler.getUserById);
+
 module.exports = userRouter;

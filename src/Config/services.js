@@ -47,3 +47,8 @@ export const googleLogin = async (payload) => {
   const url = envBaseUrl + serviceList.user + `/google-login`;
   return postRequest(url, payload);
 };
+
+export const getUserDetails = async (userId) => {
+  const url = envBaseUrl + serviceList.user + `/${userId}`;
+  return getRequest(url);
+};

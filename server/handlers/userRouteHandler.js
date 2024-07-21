@@ -87,6 +87,42 @@ const UserRouteHandler = {
       );
     }
   },
+
+  async getUserById(req, res) {
+    const { userId } = req.params;
+    if (!userId) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 400,
+          message: "User Id is required",
+          status: "ERROR",
+          error: {},
+        })
+      );
+    }
+    try {
+      const user = await UserManger.getUserById(userId);
+      if (user) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "User fetched successfully",
+            status: "SUCCESS",
+            data: user,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 500,
+          message: "Failed to get user",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
 };
 
 module.exports = UserRouteHandler;

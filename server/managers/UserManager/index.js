@@ -111,6 +111,10 @@ const UserManger = {
           },
           at: loginToken,
         };
+        if (user.logo === null || user.logo === undefined || user.logo === "") {
+          user.logo = decodeGoogleCredential?.picture;
+          await user.save();
+        }
         return Promise.resolve(data);
       } else {
         const userId = await idFieldCreator("U", User, "userId");
@@ -141,11 +145,21 @@ const UserManger = {
             userName: user?.firstName + " " + user?.lastName,
             email: user?.email,
             userId: user?.userId,
+            isGoogle: true,
           },
           at: loginToken,
         };
         return Promise.resolve(data);
       }
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  async getUserById(userId) {
+    try {
+      const user = await User.findOne({ userId });
+      return Promise.resolve(user);
     } catch (error) {
       return Promise.reject(error);
     }
