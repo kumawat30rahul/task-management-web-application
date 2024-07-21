@@ -1,9 +1,5 @@
 const idFieldCreator = require("../../utils/idCreator");
 const User = require("../../modals/userModal");
-const {
-  createSuccessResponse,
-  createErrorResponse,
-} = require("../../utils/responseHandler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -159,6 +155,19 @@ const UserManger = {
   async getUserById(userId) {
     try {
       const user = await User.findOne({ userId });
+      return Promise.resolve(user);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
+
+  async updateLogo(userId, logo) {
+    try {
+      const user = await User.findOneAndUpdate(
+        { userId },
+        { logo },
+        { new: true }
+      );
       return Promise.resolve(user);
     } catch (error) {
       return Promise.reject(error);

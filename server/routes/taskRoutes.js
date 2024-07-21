@@ -10,7 +10,7 @@ taskRouter.post("/create", TaskRouteHandler.createTask);
 taskRouter.patch("/edit", TaskRouteHandler.editingTask);
 
 //deleting task
-taskRouter.delete("/delete", TaskRouteHandler.deletingTask);
+taskRouter.delete("/delete/:taskId", TaskRouteHandler.deletingTask);
 
 //changing status of task
 taskRouter.patch("/update-status", TaskRouteHandler.changingStatus);

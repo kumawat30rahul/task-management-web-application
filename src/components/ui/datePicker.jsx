@@ -13,8 +13,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export function DatePicker({ setTasksDetails }) {
-  const [date, setDate] = React.useState(null);
+export function DatePicker({ setTasksDetails, tasksDetails }) {
+  const [date, setDate] = React.useState(tasksDetails?.expiryDate);
 
   React.useEffect(() => {
     if (date) {
@@ -42,9 +42,9 @@ export function DatePicker({ setTasksDetails }) {
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
           onSelect={setDate}
           initialFocus
+          selected={date}
         />
       </PopoverContent>
     </Popover>

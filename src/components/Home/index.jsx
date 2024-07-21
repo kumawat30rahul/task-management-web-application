@@ -7,12 +7,18 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { DatePicker } from "../ui/datePicker";
 import TaskDragAndDrop from "./components/task-dnd";
-import { createTask, editTask, getTaskById } from "@/Config/services";
+import {
+  createTask,
+  deleteTask,
+  editTask,
+  getTaskById,
+} from "@/Config/services";
 import { CircularProgress } from "@mui/material";
+import { dateFormater } from "../common/common-functions";
 
 const HomePage = () => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const [tasksDetails, setTasksDetails] = useState({});
+  const [tasksDetails, setTasksDetails] = useState();
   const [taskId, setTaskId] = useState("");
   const [taskCreationLoader, setTaskCreationLoader] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -97,10 +103,14 @@ const HomePage = () => {
                 defaultPlaceHolder="Severity"
                 options={severityOptions}
                 setTasksDetails={setTasksDetails}
+                tasksDetails={tasksDetails}
               />
             </div>
             <div>
-              <DatePicker setTasksDetails={setTasksDetails} />
+              <DatePicker
+                setTasksDetails={setTasksDetails}
+                tasksDetails={tasksDetails}
+              />
             </div>
           </div>
           <div>
@@ -143,12 +153,15 @@ const HomePage = () => {
             <div className="flex flex-col">
               <span>Created At</span>
               <span className="text-lg text-black">
-                {tasksDetails?.createdAt || "NA"}
+                {dateFormater(
+                  tasksDetails?.createdAt,
+                  "dd MMMM yyyy, hh:mm a"
+                ) || "NA"}
               </span>
             </div>
             <div>
               <span className="custom-severity-todo">
-                {tasksDetails?.severity || "TODO"}
+                {tasksDetails?.taskStatus}
               </span>
             </div>
           </div>
@@ -162,7 +175,9 @@ const HomePage = () => {
         <div>
           <span>Are you sure you want to delete this task?</span>
           <div className="flex items-center justify-end gap-2">
-            <Button className="bg-red-500 w-max">Yes</Button>
+            <Button className="bg-red-500 w-max" onClick={deleteTaskFunction}>
+              Yes
+            </Button>
             <Button className="bg-blue-500 w-max" onClick={handleClose}>
               No
             </Button>
@@ -182,6 +197,7 @@ const HomePage = () => {
         taskSeverity: res?.severity,
         expiryDate: res?.expiryDate,
         createdAt: res?.createdAt,
+        taskStatus: res?.taskStatus,
       });
       setIsOpen(true);
     } catch (error) {
@@ -213,11 +229,24 @@ const HomePage = () => {
     }
   };
 
+  const deleteTaskFunction = async () => {
+    try {
+      await deleteTask(taskId);
+      setFetchTasksAgain(true);
+      setTaskType("");
+      setIsOpen(false);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   useEffect(() => {
     if (taskType !== "Add" && taskId && taskType !== "") {
       getTasksByIdFunction(taskId);
     }
   }, [taskType]);
+
+  console.log({ tasksDetails }, { taskType });
 
   return (
     <>

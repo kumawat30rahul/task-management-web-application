@@ -1,5 +1,10 @@
 import config from "./config";
-import { getRequest, patchRequest, postRequest } from "./servicesHeaders";
+import {
+  deleteRequest,
+  getRequest,
+  patchRequest,
+  postRequest,
+} from "./servicesHeaders";
 
 let envBaseUrl = config[import.meta.env.VITE_MY_ENV].backendUrl;
 
@@ -51,4 +56,9 @@ export const googleLogin = async (payload) => {
 export const getUserDetails = async (userId) => {
   const url = envBaseUrl + serviceList.user + `/${userId}`;
   return getRequest(url);
+};
+
+export const deleteTask = async (taskId) => {
+  const url = envBaseUrl + serviceList.task + `/delete/${taskId}`;
+  return deleteRequest(url);
 };

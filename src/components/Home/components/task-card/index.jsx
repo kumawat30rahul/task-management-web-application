@@ -1,3 +1,4 @@
+import { dateFormater } from "@/components/common/common-functions";
 import { Button } from "@/components/ui/button";
 import { CircularProgress } from "@mui/material";
 import { format } from "date-fns";
@@ -21,6 +22,7 @@ const TaskCard = ({
     setTaskId(taskId);
     // setIsOpen(true);
   };
+
   return (
     <div
       className="w-full border border-gray-500 p-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 bg-white"
@@ -37,7 +39,7 @@ const TaskCard = ({
             <span className="text-xl font-bold">{task?.taskName || "NA"}</span>
             <span className="text-md">{task?.taskDescription || "NA"}</span>
             <span className="text-xs text-gray-500">
-              {format(task?.createdAt, "dd MMMM yyyy, hh:mm a")}
+              {dateFormater(task?.createdAt, "dd MMMM yyyy, hh:mm a")}
             </span>
           </div>
           <div className="w-full flex items-center justify-between mt-2">
@@ -53,7 +55,7 @@ const TaskCard = ({
               {task?.severity || "NA"}
             </span>
             <span className="text-xs">
-              Due Date: {task?.expiryDate || "NA"}
+              Due Date: {dateFormater(task?.expiryDate, "dd MMMM yyyy") || "NA"}
             </span>
           </div>
           <div className="w-full flex items-center justify-end gap-2 mt-2">

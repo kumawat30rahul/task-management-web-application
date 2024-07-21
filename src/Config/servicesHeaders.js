@@ -72,10 +72,10 @@ export const patchRequest = async (url, data) => {
   });
 };
 
-export const deleteRequest = async (url) => {
+export const deleteRequest = async (url, data) => {
   return new Promise((resolve, reject) => {
     axios
-      .delete(url, { headers: { ...deleteHeaders } })
+      .delete(url, data, { headers: { ...deleteHeaders } })
       .then((response) => {
         resolve(response.data);
       })

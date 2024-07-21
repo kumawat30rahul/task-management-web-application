@@ -5,12 +5,12 @@ import CommonDialog from "../common/common-dialog";
 import { useNavigate } from "react-router-dom";
 import { SheetDemo } from "./userDetailsSheet";
 import { getUserDetails } from "@/Config/services";
+import { dateFormater } from "../common/common-functions";
 
 const Navbar = () => {
   const [isLogoutModal, setIsLogoutModal] = useState(false);
   const [isUserDetailsModal, setIsUserDetailsModal] = useState(false);
   const userId = JSON.parse(localStorage.getItem("userDetails"))?.userId;
-  console.log(userId);
   const [userDetails, setUserDetails] = useState();
   const navigate = useNavigate();
 
@@ -95,7 +95,7 @@ const Navbar = () => {
                   sx={{ height: 100, width: 100 }}
                 />
               </div>
-              <div className="flex flex-col items-start gap-3">
+              <div className="flex flex-col items-start gap-3 w-full">
                 <div className="flex flex-col items-start justify-start">
                   <span>Name</span>
                   <span className="text-md font-bold">
@@ -111,7 +111,10 @@ const Navbar = () => {
                 <div className="flex flex-col items-start justify-start">
                   <span>Created At</span>
                   <span className="text-md font-bold">
-                    {userDetails?.createdAt}
+                    {dateFormater(
+                      userDetails?.createdAt,
+                      "dd MMMM yyyy, hh:mm a"
+                    )}
                   </span>
                 </div>
               </div>

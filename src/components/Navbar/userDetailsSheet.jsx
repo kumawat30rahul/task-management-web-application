@@ -16,7 +16,7 @@ export function SheetDemo({ triggerButton, children }) {
       <SheetTrigger asChild>{triggerButton}</SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Edit profile</SheetTitle>
+          <SheetTitle>User profile</SheetTitle>
           <div>{children}</div>
         </SheetHeader>
       </SheetContent>

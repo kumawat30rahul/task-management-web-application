@@ -123,6 +123,42 @@ const UserRouteHandler = {
       );
     }
   },
+
+  async updateLogo(req, res) {
+    const { userId, logo } = req.body;
+    if (!userId || !logo) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 400,
+          message: "User Id and logo are required",
+          status: "ERROR",
+          error: {},
+        })
+      );
+    }
+    try {
+      const user = await UserManger.updateLogo(userId, logo);
+      if (user) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "User logo updated successfully",
+            status: "SUCCESS",
+            data: user,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createErrorResponse({
+          statusCode: 500,
+          message: "Failed to update user logo",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
 };
 
 module.exports = UserRouteHandler;

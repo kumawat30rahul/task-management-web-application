@@ -15,4 +15,7 @@ userRouter.post("/google-login", UserRouteHandler.googleLogin);
 //get user by id
 userRouter.get("/:userId", UserRouteHandler.getUserById);
 
+//update logo
+userRouter.put("/update-logo", UserRouteHandler.updateLogo);
+
 module.exports = userRouter;
