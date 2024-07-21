@@ -24,4 +24,7 @@ taskRouter.get("/get-task/:taskId", TaskRouteHandler.getTaskById);
 //searching task by name
 taskRouter.get("/search", TaskRouteHandler.searchTask);
 
+//sorting according to time
+// taskRouter.get("/sort/:sort", TaskRouteHandler.sortTask);
+
 module.exports = taskRouter;

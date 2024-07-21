@@ -288,12 +288,12 @@ const HomePage = () => {
               </div>
             </SearchSheet>
           </div>
-          <div>
+          {/* <div>
             <SelectCommon
               defaultPlaceHolder="Sort By"
               options={sortingOptions}
             />
-          </div>
+          </div> */}
         </div>
         <Separator orientation="horizontal" className="mt-10 sm:mt-0" />
         <TaskDragAndDrop

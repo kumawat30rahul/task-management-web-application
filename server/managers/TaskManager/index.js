@@ -109,6 +109,15 @@ const TaskManager = {
       return Promise.reject(error);
     }
   },
+
+  // async sortTask(sort) {
+  //   try {
+  //     const task = await Task.find().sort({ createdAt: sort });
+  //     return Promise.resolve(task);
+  //   } catch (error) {
+  //     return Promise.reject(error);
+  //   }
+  // }
 };
 
 module.exports = TaskManager;

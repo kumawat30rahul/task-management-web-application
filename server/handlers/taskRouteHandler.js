@@ -35,7 +35,6 @@ const TaskRouteHandler = {
   },
 
   async editingTask(req, res) {
-    console.log(req.body);
     const isTaskValid = taskValidation(req.body);
     if (isTaskValid) return res.send(isTaskValid);
     try {
@@ -230,6 +229,32 @@ const TaskRouteHandler = {
       );
     }
   },
+
+  // async sortTask(req, res) {
+  //   const { sort } = req.params;
+  //   try {
+  //     const response = await TaskManager.sortTask(sort);
+  //     if (response) {
+  //       return res.send(
+  //         createSuccessResponse({
+  //           statusCode: 200,
+  //           message: "Successfully Fetched Task",
+  //           status: "SUCCESS",
+  //           data: response,
+  //         })
+  //       );
+  //     }
+  //   } catch (error) {
+  //     return res.send(
+  //       createConnectionErrorResponse({
+  //         statusCode: 500,
+  //         message: "Something Went wrong while fetching task",
+  //         status: "ERROR",
+  //         error: error,
+  //       })
+  //     );
+  //   }
+  // },
 };
 
 module.exports = TaskRouteHandler;
