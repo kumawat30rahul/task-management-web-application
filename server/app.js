@@ -10,7 +10,7 @@ const app = express();
 app.use(express.json()); //parse application/json
 app.use(express.urlencoded({ extended: true })); //parse application/x-www-form-urlencoded
 
-//cors
+//cors options
 const corsoptions = {
   origin: [
     "http://localhost:5173/",
