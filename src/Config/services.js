@@ -42,3 +42,8 @@ export const editTask = async (payload) => {
   const url = envBaseUrl + serviceList.task + `/edit`;
   return patchRequest(url, payload);
 };
+
+export const googleLogin = async (payload) => {
+  const url = envBaseUrl + serviceList.user + `/google-login`;
+  return postRequest(url, payload);
+};

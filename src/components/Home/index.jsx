@@ -245,9 +245,9 @@ const HomePage = () => {
             <Button className="bg-blue-500">Add Task</Button>
           </CommonDialog>
         </div>
-        <div className="h-14 w-full rounded-full flex items-center justify-between">
-          <div className="w-1/4 rounded-lg">
-            <Input className="rounded-lg" placeholder="Search Here..." />
+        <div className="h-14 w-full rounded-full flex flex-col gap-2 sm:flex-row sm:items-center justify-between">
+          <div className="w-full sm:w-2/4 lg:w-1/4 rounded-lg">
+            <Input className="rounded-lg w-full" placeholder="Search Here..." />
           </div>
           <div>
             <SelectCommon
@@ -256,7 +256,7 @@ const HomePage = () => {
             />
           </div>
         </div>
-        <Separator orientation="horizontal" />
+        <Separator orientation="horizontal" className="mt-10 sm:mt-0" />
         <TaskDragAndDrop
           fetchTasksAgain={fetchTasksAgain}
           setFetchTasksAgain={setFetchTasksAgain}

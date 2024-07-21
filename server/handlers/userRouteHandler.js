@@ -62,6 +62,31 @@ const UserRouteHandler = {
       );
     }
   },
+
+  async googleLogin(req, res) {
+    try {
+      const user = await UserManger.googleLogin(req.body);
+      if (user) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "User logged in successfully",
+            status: "SUCCESS",
+            data: user,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createErrorResponse({
+          statusCode: error?.statusCode || 500,
+          message: error?.message || "Failed to login user",
+          status: error?.status || "ERROR",
+          error: error?.error,
+        })
+      );
+    }
+  },
 };
 
 module.exports = UserRouteHandler;

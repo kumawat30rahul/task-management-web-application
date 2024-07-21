@@ -65,7 +65,6 @@ const TaskManager = {
   async deleteTask(taskId) {
     try {
       const task = await Task.deleteOne({ taskId });
-      console.log(task);
       return Promise.resolve(task);
     } catch (error) {
       return Promise.reject(error);
@@ -75,7 +74,6 @@ const TaskManager = {
   async changeStatus(taskData) {
     try {
       const { taskId, taskStatus } = taskData;
-      console.log(taskData);
       const task = await Task.findOneAndUpdate({ taskId }, { taskStatus });
       return Promise.resolve(task);
     } catch (error) {

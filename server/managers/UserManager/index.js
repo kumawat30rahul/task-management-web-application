@@ -20,6 +20,7 @@ const UserManger = {
         email: data?.email,
         firstName: data?.firstName,
         lastName: data?.lastName,
+        logo: data?.logo,
         password: hashedPassword,
         createdAt: new Date(),
       });
@@ -81,6 +82,71 @@ const UserManger = {
         status: "ERROR",
         error: err,
       };
+      return Promise.reject(error);
+    }
+  },
+
+  async googleLogin(data) {
+    try {
+      const decodeGoogleCredential = jwt.decode(
+        data?.googleCredential?.credential
+      );
+      const user = await User.findOne({ email: decodeGoogleCredential?.email });
+      if (user) {
+        const loginToken = jwt.sign(
+          {
+            loginTime: new Date(),
+            userName: user?.firstName + " " + user?.lastName,
+            email: user?.email,
+            userId: user?.userId,
+          },
+          process.env.AT_SCECRET_KEY
+        );
+
+        const data = {
+          user: {
+            userName: user?.firstName + " " + user?.lastName,
+            email: user?.email,
+            userId: user?.userId,
+          },
+          at: loginToken,
+        };
+        return Promise.resolve(data);
+      } else {
+        const userId = await idFieldCreator("U", User, "userId");
+        const user = User({
+          userId: userId,
+          email: decodeGoogleCredential?.email,
+          firstName: decodeGoogleCredential?.given_name,
+          lastName: decodeGoogleCredential?.family_name,
+          logo: decodeGoogleCredential?.picture,
+          createdAt: new Date(),
+        });
+
+        await user.save();
+
+        const loginToken = jwt.sign(
+          {
+            loginTime: new Date(),
+            userName: user?.firstName + " " + user?.lastName,
+            email: user?.email,
+            userId: user?.userId,
+            expiry: decodeGoogleCredential?.exp,
+          },
+          process.env.AT_SCECRET_KEY
+        );
+
+        const data = {
+          user: {
+            userName: user?.firstName + " " + user?.lastName,
+            email: user?.email,
+            userId: user?.userId,
+          },
+          at: loginToken,
+        };
+        return Promise.resolve(data);
+      }
+    } catch (error) {
       return Promise.reject(error);
     }
   },
