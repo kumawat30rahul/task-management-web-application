@@ -5,8 +5,8 @@ import Navbar from "../Navbar";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { DatePicker } from "../ui/datePicker";
+import TaskDragAndDrop from "./components/task-dnd";
 
 const HomePage = () => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -143,9 +143,7 @@ const HomePage = () => {
           </div>
         </div>
         <Separator orientation="horizontal" />
-        <div>
-          {/* <DragDropContext onDragEnd={onDragEnd}></DragDropContext> */}
-        </div>
+        <TaskDragAndDrop />
       </div>
     </>
   );

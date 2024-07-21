@@ -194,7 +194,7 @@ const TaskRouteHandler = {
     }
   },
 
-  async getTaskBySearch(req, res) {
+  async searchTask(req, res) {
     const { taskName } = req.query;
     if (!taskName) {
       return res.send(
