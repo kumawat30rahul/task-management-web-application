@@ -15,6 +15,7 @@ import {
 } from "@/Config/services";
 import { CircularProgress } from "@mui/material";
 import { dateFormater } from "../common/common-functions";
+import { SearchSheet } from "./components/searchDetails";
 
 const HomePage = () => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -278,7 +279,14 @@ const HomePage = () => {
         </div>
         <div className="h-14 w-full rounded-full flex flex-col gap-2 sm:flex-row sm:items-center justify-between">
           <div className="w-full sm:w-2/4 lg:w-1/4 rounded-lg">
-            <Input className="rounded-lg w-full" placeholder="Search Here..." />
+            <SearchSheet setTaskType={setTaskType} setTaskId={setTaskId}>
+              <div>
+                <Input
+                  className="rounded-lg w-full"
+                  placeholder="Search Here..."
+                />
+              </div>
+            </SearchSheet>
           </div>
           <div>
             <SelectCommon

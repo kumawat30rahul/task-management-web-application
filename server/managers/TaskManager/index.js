@@ -101,7 +101,9 @@ const TaskManager = {
 
   async searchTask(taskName) {
     try {
-      const task = await Task.find({ taskName: { $regex: taskName } });
+      const task = await Task.find({
+        taskName: { $regex: taskName, $options: "i" },
+      });
       return Promise.resolve(task);
     } catch (error) {
       return Promise.reject(error);

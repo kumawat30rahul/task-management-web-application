@@ -25,7 +25,13 @@ const TaskCard = ({
 
   return (
     <div
-      className="w-full border border-gray-500 p-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 bg-white"
+      className={`w-full border  border-t-8  p-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 bg-white ${
+        task?.status === "CLOSED"
+          ? "border-red-500"
+          : task?.status === "INPROGRESS"
+          ? "border-yellow-500"
+          : "border-blue-500"
+      }`}
       key={key}
     >
       {updateTaskStatusLoader?.loader &&
@@ -36,8 +42,12 @@ const TaskCard = ({
       ) : (
         <>
           <div className="flex flex-col items-start gap-2">
-            <span className="text-xl font-bold">{task?.taskName || "NA"}</span>
-            <span className="text-md">{task?.taskDescription || "NA"}</span>
+            <span className="text-lg md:text-xl font-bold">
+              {task?.taskName || "NA"}
+            </span>
+            <span className="text-sm md:text-md text-start">
+              {task?.taskDescription || "NA"}
+            </span>
             <span className="text-xs text-gray-500">
               {dateFormater(task?.createdAt, "dd MMMM yyyy, hh:mm a")}
             </span>

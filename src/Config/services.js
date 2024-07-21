@@ -62,3 +62,8 @@ export const deleteTask = async (taskId) => {
   const url = envBaseUrl + serviceList.task + `/delete/${taskId}`;
   return deleteRequest(url);
 };
+
+export const searchTasks = async (searchQuery) => {
+  const url = envBaseUrl + serviceList.task + `/search?taskName=${searchQuery}`;
+  return getRequest(url);
+};
