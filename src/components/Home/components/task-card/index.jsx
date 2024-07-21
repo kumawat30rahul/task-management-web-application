@@ -2,7 +2,25 @@ import { Button } from "@/components/ui/button";
 import { CircularProgress } from "@mui/material";
 import { format } from "date-fns";
 
-const TaskCard = ({ task, key, updateTaskStatusLoader }) => {
+const TaskCard = ({
+  task,
+  key,
+  updateTaskStatusLoader,
+  setTaskType,
+  setIsOpen,
+  setTaskId,
+}) => {
+  const taskCardButtonHandler = (type, taskId) => {
+    if (type === "Delete") {
+      setTaskType("Delete");
+    } else if (type === "Edit") {
+      setTaskType("Edit");
+    } else {
+      setTaskType("View");
+    }
+    setTaskId(taskId);
+    // setIsOpen(true);
+  };
   return (
     <div
       className="w-full border border-gray-500 p-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 bg-white"
@@ -27,13 +45,28 @@ const TaskCard = ({ task, key, updateTaskStatusLoader }) => {
               {task?.severity || "NA"}
             </span>
             <span className="text-xs">
-              Due Date: {format(task?.expiryDate, "dd MMMM yyyy")}
+              Due Date: {task?.expiryDate || "NA"}
             </span>
           </div>
           <div className="w-full flex items-center justify-end gap-2 mt-2">
-            <Button className="bg-red-500 px-2 h-8">Delete</Button>
-            <Button className="bg-blue-500 px-2 h-8">Edit</Button>
-            <Button className="bg-blue-700 px-2 h-8">view</Button>
+            <Button
+              className="bg-red-500 px-2 h-8"
+              onClick={() => taskCardButtonHandler("Delete", task?.id)}
+            >
+              Delete
+            </Button>
+            <Button
+              className="bg-blue-500 px-2 h-8"
+              onClick={() => taskCardButtonHandler("Edit", task?.id)}
+            >
+              Edit
+            </Button>
+            <Button
+              className="bg-blue-700 px-2 h-8"
+              onClick={() => taskCardButtonHandler("View", task?.id)}
+            >
+              view
+            </Button>
           </div>
         </>
       )}

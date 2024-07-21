@@ -27,3 +27,13 @@ export const updateTaskStatus = async (payload) => {
   const url = envBaseUrl + serviceList.task + `/update-status`;
   return patchRequest(url, payload);
 };
+
+export const createTask = async (payload) => {
+  const url = envBaseUrl + serviceList.task + `/create`;
+  return postRequest(url, payload);
+};
+
+export const getTaskById = async (taskId) => {
+  const url = envBaseUrl + serviceList.task + `/get-task/${taskId}`;
+  return getRequest(url);
+};

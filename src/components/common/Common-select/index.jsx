@@ -10,7 +10,7 @@ const SelectCommon = ({ options, setTasksDetails, defaultPlaceHolder }) => {
   const handleChange = (value) => {
     setTasksDetails((prev) => ({
       ...prev,
-      severity: value,
+      taskSeverity: value,
     }));
   };
   return (

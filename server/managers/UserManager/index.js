@@ -60,6 +60,7 @@ const UserManger = {
           loginTime: new Date(),
           userName: user?.firstName + " " + user?.lastName,
           email: user?.email,
+          userId: user?.userId,
         },
         process.env.AT_SCECRET_KEY
       );
@@ -68,6 +69,7 @@ const UserManger = {
         user: {
           userName: user?.firstName + " " + user?.lastName,
           email: user?.email,
+          userId: user?.userId,
         },
         at: loginToken,
       };

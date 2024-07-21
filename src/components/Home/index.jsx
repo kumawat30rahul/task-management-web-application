@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommonDialog from "../common/common-dialog";
 import SelectCommon from "../common/Common-select";
 import Navbar from "../Navbar";
@@ -7,16 +7,17 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { DatePicker } from "../ui/datePicker";
 import TaskDragAndDrop from "./components/task-dnd";
+import { createTask, getTaskById } from "@/Config/services";
+import { CircularProgress } from "@mui/material";
 
 const HomePage = () => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const [tasksDetails, setTasksDetails] = useState({
-    taskName: "",
-    taskDesc: "",
-    taskSeverity: "",
-    taskDate: "",
-  });
-  const [taskType, setTaskType] = useState("Edit");
+  const [tasksDetails, setTasksDetails] = useState({});
+  const [taskId, setTaskId] = useState("");
+  const [taskCreationLoader, setTaskCreationLoader] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [fetchTasksAgain, setFetchTasksAgain] = useState(false);
+  const [taskType, setTaskType] = useState("");
   const { userName } = userDetails;
 
   const sortingOptions = [
@@ -39,6 +40,35 @@ const HomePage = () => {
     }));
   };
 
+  const createTaskFunction = async () => {
+    setTaskCreationLoader(true);
+    try {
+      const payload = {
+        taskName: tasksDetails?.taskName,
+        taskDescription: tasksDetails?.taskDesc,
+        severity: tasksDetails?.taskSeverity,
+        expiryDate: tasksDetails?.expiryDate,
+        createdBy: userName,
+        createdByUserId: userDetails?.userId,
+      };
+
+      await createTask(payload);
+      setTaskCreationLoader(false);
+      setFetchTasksAgain(true);
+      setIsOpen(false);
+    } catch (error) {
+      alert(error);
+      setTaskCreationLoader(false);
+    }
+  };
+
+  const handleClose = () => {
+    setTaskType("");
+    setIsOpen(false);
+  };
+
+  console.log({ tasksDetails });
+
   const dialogContent = () => {
     if (taskType === "Add" || taskType === "Edit") {
       return (
@@ -47,6 +77,7 @@ const HomePage = () => {
             <label htmlFor="name">Title</label>
             <Input
               placeholder="Type Here..."
+              value={tasksDetails?.taskName}
               name="name"
               className="custom-input"
               onChange={(e) => taskDetailsHandler(e.target.value, "taskName")}
@@ -56,6 +87,7 @@ const HomePage = () => {
             <label htmlFor="desc">Task Description</label>
             <Input
               placeholder="Type Here..."
+              value={tasksDetails?.taskDesc}
               name="desc"
               className="custom-input"
               onChange={(e) => taskDetailsHandler(e.target.value, "taskDesc")}
@@ -74,7 +106,18 @@ const HomePage = () => {
             </div>
           </div>
           <div>
-            <Button className="bg-blue-500">Save</Button>
+            <Button className="bg-blue-500" onClick={createTaskFunction}>
+              {taskCreationLoader ? (
+                <CircularProgress
+                  size={18}
+                  sx={{ color: "white !important" }}
+                />
+              ) : taskType === "Edit" ? (
+                "Update"
+              ) : (
+                "Create Task"
+              )}
+            </Button>
           </div>
         </div>
       );
@@ -90,7 +133,7 @@ const HomePage = () => {
           <div className="flex flex-col">
             <span>Description</span>
             <span className="text-lg text-black">
-              {tasksDetails?.taskDesc || "NA"}
+              {tasksDetails?.taskDescription || "NA"}
             </span>
           </div>
           <div className="flex items-start justify-between">
@@ -109,8 +152,43 @@ const HomePage = () => {
           <Button className="bg-blue-500 w-max">Close</Button>
         </div>
       );
+    } else if (taskType === "Delete") {
+      return (
+        <div>
+          <span>Are you sure you want to delete this task?</span>
+          <div className="flex items-center justify-end gap-2">
+            <Button className="bg-red-500 w-max">Yes</Button>
+            <Button className="bg-blue-500 w-max" onClick={handleClose}>
+              No
+            </Button>
+          </div>
+        </div>
+      );
     }
   };
+
+  const getTasksByIdFunction = async (taskId) => {
+    try {
+      const response = await getTaskById(taskId);
+      const res = response?.data;
+      setTasksDetails({
+        taskName: res?.taskName,
+        taskDesc: res?.taskDesc,
+        taskSeverity: res?.severity,
+        expiryDate: res?.expiryDate,
+        createdAt: res?.createdAt,
+      });
+      setIsOpen(true);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  useEffect(() => {
+    if (taskType !== "Add" && taskId && taskType !== "") {
+      getTasksByIdFunction(taskId);
+    }
+  }, [taskType]);
 
   return (
     <>
@@ -126,6 +204,13 @@ const HomePage = () => {
                 ? "Task Details"
                 : "Edit Task"
             }`}
+            isOpen={isOpen}
+            setIsOpen={() => {
+              setIsOpen(true);
+              setTaskType("Add");
+              setTasksDetails({});
+            }}
+            setIsClose={handleClose}
             dialogContent={dialogContent()}
           >
             <Button className="bg-blue-500">Add Task</Button>
@@ -143,7 +228,13 @@ const HomePage = () => {
           </div>
         </div>
         <Separator orientation="horizontal" />
-        <TaskDragAndDrop />
+        <TaskDragAndDrop
+          fetchTasksAgain={fetchTasksAgain}
+          setFetchTasksAgain={setFetchTasksAgain}
+          setTaskType={setTaskType}
+          setIsOpen={setIsOpen}
+          setTaskId={setTaskId}
+        />
       </div>
     </>
   );

@@ -85,7 +85,7 @@ const TaskManager = {
 
   async getTasks() {
     try {
-      const task = await Task.find();
+      const task = await Task.find().sort({ createdAt: -1 });
       return Promise.resolve(task);
     } catch (error) {
       return Promise.reject(error);
