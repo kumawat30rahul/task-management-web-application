@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { useToast } from "@/components/ui/use-toast";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -17,9 +19,9 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
   const [loginLoader, setLoginLoader] = useState(false);
   const [googleLoginLoader, setGoogleLoginLoader] = useState(false);
+  const [viewPassword, setViewPassword] = useState(false);
 
   const loginUserFunction = async () => {
     setLoginLoader(true);
@@ -110,15 +112,19 @@ const LoginPage = () => {
               <span className="text-xs text-red-500">Invalid Email</span>
             )}
           </div>
-          <Input
-            placeholder="Enter your email"
-            onFocus={() => setInputLabel("email")}
-            onBlur={() => {
-              setInputLabel("");
-            }}
-            name="email"
-            onChange={(e) => handleLoginUserDataChange(e.target.value, "email")}
-          />
+          <div className="relative w-full">
+            <Input
+              placeholder="Enter your email"
+              onFocus={() => setInputLabel("email")}
+              onBlur={() => {
+                setInputLabel("");
+              }}
+              name="email"
+              onChange={(e) =>
+                handleLoginUserDataChange(e.target.value, "email")
+              }
+            />
+          </div>
         </div>
         <div className="flex flex-col items-start w-full gap-2">
           <label
@@ -129,16 +135,31 @@ const LoginPage = () => {
           >
             Your Password
           </label>
-          <Input
-            placeholder="Password"
-            onFocus={() => setInputLabel("password")}
-            onBlur={() => setInputLabel("")}
-            name="password"
-            type="password"
-            onChange={(e) =>
-              handleLoginUserDataChange(e.target.value, "password")
-            }
-          />
+          <div className="w-full relative">
+            <Input
+              placeholder="Password"
+              onFocus={() => setInputLabel("password")}
+              onBlur={() => setInputLabel("")}
+              name="password"
+              type={viewPassword ? "text" : "password"}
+              onChange={(e) =>
+                handleLoginUserDataChange(e.target.value, "password")
+              }
+            />
+            <div className="absolute right-2 top-1">
+              {!viewPassword ? (
+                <VisibilityIcon
+                  className="cursor-pointer"
+                  onClick={() => setViewPassword(true)}
+                />
+              ) : (
+                <VisibilityOffIcon
+                  className="cursor-pointer"
+                  onClick={() => setViewPassword(false)}
+                />
+              )}
+            </div>
+          </div>
         </div>
         <div className="w-full h-auto">
           <Button

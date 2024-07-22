@@ -6,6 +6,8 @@ import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { emailValidator } from "@/components/common/common-functions";
 import { useToast } from "@/components/ui/use-toast";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -20,6 +22,7 @@ const SignUpPage = () => {
     confirmedPassword: "",
   });
   const [registeringUserLoader, setRegisteringUserLoader] = useState(false);
+  const [viewPassword, setViewPassword] = useState(false);
 
   const handleUserInfoChange = (value, name) => {
     if (name === "email") {
@@ -149,14 +152,29 @@ const SignUpPage = () => {
           >
             Your Password
           </label>
-          <Input
-            placeholder="Enter your email"
-            onFocus={() => setInputLabel("password")}
-            onBlur={() => setInputLabel("")}
-            name="password"
-            type="password"
-            onChange={(e) => handleUserInfoChange(e.target.value, "password")}
-          />
+          <div className="w-full relative">
+            <Input
+              placeholder="Enter your email"
+              onFocus={() => setInputLabel("password")}
+              onBlur={() => setInputLabel("")}
+              name="password"
+              type={viewPassword ? "text" : "password"}
+              onChange={(e) => handleUserInfoChange(e.target.value, "password")}
+            />
+            <div className="absolute right-2 top-1">
+              {!viewPassword ? (
+                <VisibilityIcon
+                  className="cursor-pointer"
+                  onClick={() => setViewPassword(true)}
+                />
+              ) : (
+                <VisibilityOffIcon
+                  className="cursor-pointer"
+                  onClick={() => setViewPassword(false)}
+                />
+              )}
+            </div>
+          </div>
         </div>
         <div className="flex flex-col items-start w-full gap-2">
           <label
