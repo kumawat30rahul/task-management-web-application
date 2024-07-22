@@ -6,10 +6,11 @@ import { CircularProgress } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { useToast } from "@/components/ui/use-toast";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [inputLabel, setInputLabel] = useState("");
   const [inValidEmail, setInvalidEmail] = useState(null);
   const [loginUserData, setLoginUserData] = useState({
@@ -18,17 +19,37 @@ const LoginPage = () => {
   });
 
   const [loginLoader, setLoginLoader] = useState(false);
+  const [googleLoginLoader, setGoogleLoginLoader] = useState(false);
 
   const loginUserFunction = async () => {
     setLoginLoader(true);
-    const response = await loginUser(loginUserData);
-    const userDetails = response?.data?.user;
-    const access_token = response?.data?.at;
-    localStorage.setItem("userDetails", JSON.stringify(userDetails));
-    localStorage.setItem("access_token", access_token);
-    navigate("/");
-    alert(response?.message);
-    setLoginLoader(false);
+    try {
+      const response = await loginUser(loginUserData);
+      if (response?.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        setLoginLoader(false);
+        return;
+      }
+      const userDetails = response?.data?.user;
+      const access_token = response?.data?.at;
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+      localStorage.setItem("access_token", access_token);
+      toast({
+        variant: "success",
+        title: "Login Success",
+      });
+      navigate("/");
+      setLoginLoader(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
+      setLoginLoader(false);
+    }
   };
 
   const handleLoginUserDataChange = (value, name) => {
@@ -52,6 +73,7 @@ const LoginPage = () => {
   };
 
   const creatingUser = async (googleCredential) => {
+    setGoogleLoginLoader(true);
     const payload = {
       googleCredential: googleCredential,
     };
@@ -61,9 +83,14 @@ const LoginPage = () => {
       const access_token = response?.data?.at;
       localStorage.setItem("userDetails", JSON.stringify(userDetails));
       localStorage.setItem("access_token", access_token);
+      setGoogleLoginLoader(false);
+      toast({
+        title: "Login Success",
+      });
       navigate("/");
     } catch (error) {
       alert(error);
+      setGoogleLoginLoader(false);
     }
   };
 
@@ -128,7 +155,7 @@ const LoginPage = () => {
 
         <div className="flex flex-col items-center justify-start gap-3">
           <span className="text-sm">- or Continue With -</span>
-          <div className="-5">
+          <div className="flex items-center justify-center gap-1">
             {/* <Button className="w-full flex items-center justify-center rounded-full bg-white text-black border border-gray-500 hover:bg-gray-500/20 text-md">
               <img
                 src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
@@ -143,6 +170,7 @@ const LoginPage = () => {
                 alert("Login Failed");
               }}
             />
+            {googleLoginLoader && <CircularProgress size={20} />}
             {/* </Button> */}
           </div>
         </div>

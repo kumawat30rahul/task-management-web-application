@@ -5,9 +5,11 @@ import { registerUser } from "@/Config/services";
 import { CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { emailValidator } from "@/components/common/common-functions";
+import { useToast } from "@/components/ui/use-toast";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [inputLabel, setInputLabel] = useState("");
   const [inValidEmail, setInvalidEmail] = useState(null);
   const [userInfo, setUserInfo] = useState({
@@ -45,14 +47,29 @@ const SignUpPage = () => {
       ...userInfo,
       createdAt: new Date(),
     };
-    const response = await registerUser(payload);
-    setRegisteringUserLoader(false);
-    // if(response?.status === 'SUCCESS'){
-    alert(response?.message);
-    navigate("/login");
-    // }else{
-    // alert
-    // }
+    try {
+      const response = await registerUser(payload);
+      if (response?.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        setRegisteringUserLoader(false);
+        return;
+      }
+      setRegisteringUserLoader(false);
+      toast({
+        variant: "success",
+        title: response?.message,
+      });
+      navigate("/login");
+    } catch (error) {
+      setRegisteringUserLoader(false);
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
+    }
   };
 
   return (

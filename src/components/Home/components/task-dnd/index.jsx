@@ -3,6 +3,7 @@ import TaskCard from "../task-card";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
 import { getAllTasks, updateTaskStatus } from "@/Config/services";
+import { useToast } from "@/components/ui/use-toast";
 
 let initialData = {
   tasks: {},
@@ -34,6 +35,7 @@ const TaskDragAndDrop = ({
   setTaskId,
 }) => {
   const [state, setState] = useState(initialData);
+  const { toast } = useToast();
   const [updateTaskStatusLoader, setUpdateTaskStatusLoader] = useState({
     loader: false,
     taksId: "",
@@ -106,6 +108,13 @@ const TaskDragAndDrop = ({
   const fetchingAllTasks = async () => {
     try {
       const response = await getAllTasks();
+      if (response.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        return;
+      }
       const allTasks = response?.data?.reduce((acc, task) => {
         acc[task?.taskId] = {
           id: task?.taskId,
@@ -143,7 +152,11 @@ const TaskDragAndDrop = ({
       setState(newInitialData);
       setFetchTasksAgain(false);
     } catch (error) {
-      alert(error);
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
+      setFetchTasksAgain(false);
     }
   };
 
@@ -175,13 +188,31 @@ const TaskDragAndDrop = ({
         taskId,
         taskStatus: status,
       };
-      await updateTaskStatus(payload);
+      const response = await updateTaskStatus(payload);
+      if (response.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        setUpdateTaskStatusLoader({
+          loader: false,
+          taksId: "",
+        });
+        return;
+      }
       setUpdateTaskStatusLoader({
         loader: false,
         taksId: "",
       });
     } catch (error) {
-      alert(error);
+      setUpdateTaskStatusLoader({
+        loader: false,
+        taksId: "",
+      });
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
     }
   };
 

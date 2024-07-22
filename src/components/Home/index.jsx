@@ -16,8 +16,10 @@ import {
 import { CircularProgress } from "@mui/material";
 import { dateFormater } from "../common/common-functions";
 import { SearchSheet } from "./components/searchDetails";
+import { useToast } from "../ui/use-toast";
 
 const HomePage = () => {
+  const { toast } = useToast();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [tasksDetails, setTasksDetails] = useState();
   const [taskId, setTaskId] = useState("");
@@ -59,12 +61,23 @@ const HomePage = () => {
         createdByUserId: userDetails?.userId,
       };
 
-      await createTask(payload);
+      const response = await createTask(payload);
+      if (response?.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        setTaskCreationLoader(false);
+        return;
+      }
       setTaskCreationLoader(false);
       setFetchTasksAgain(true);
       setIsOpen(false);
     } catch (error) {
-      alert(error);
+      toast({
+        variant: "destructive",
+        title: response?.message,
+      });
       setTaskCreationLoader(false);
     }
   };
@@ -193,6 +206,13 @@ const HomePage = () => {
   const getTasksByIdFunction = async (taskId) => {
     try {
       const response = await getTaskById(taskId);
+      if (response.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        return;
+      }
       const res = response?.data;
       setTasksDetails({
         taskName: res?.taskName,
@@ -204,7 +224,10 @@ const HomePage = () => {
       });
       setIsOpen(true);
     } catch (error) {
-      alert(error);
+      toast({
+        variant: "destructive",
+        title: "Failed to fetch task details",
+      });
     }
   };
   const editingTaskFunction = async () => {
@@ -222,24 +245,45 @@ const HomePage = () => {
       };
 
       const response = await editTask(payload);
+      if (response?.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        setTaskCreationLoader(false);
+        return;
+      }
       setTaskCreationLoader(false);
       setFetchTasksAgain(true);
       setTaskType("");
       setIsOpen(false);
     } catch (error) {
-      alert(error);
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
       setTaskCreationLoader(false);
     }
   };
 
   const deleteTaskFunction = async () => {
     try {
-      await deleteTask(taskId);
+      const response = await deleteTask(taskId);
+      if (response?.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        return;
+      }
       setFetchTasksAgain(true);
       setTaskType("");
       setIsOpen(false);
     } catch (error) {
-      alert(error);
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
     }
   };
 

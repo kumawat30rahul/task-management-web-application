@@ -6,8 +6,10 @@ import { useNavigate } from "react-router-dom";
 import { SheetDemo } from "./userDetailsSheet";
 import { getUserDetails } from "@/Config/services";
 import { dateFormater } from "../common/common-functions";
+import { useToast } from "../ui/use-toast";
 
 const Navbar = () => {
+  const { toast } = useToast();
   const [isLogoutModal, setIsLogoutModal] = useState(false);
   const [isUserDetailsModal, setIsUserDetailsModal] = useState(false);
   const userId = JSON.parse(localStorage.getItem("userDetails"))?.userId;
@@ -36,6 +38,10 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.clear();
+    toast({
+      variant: "success",
+      title: "Logout Success",
+    });
     navigate("/login");
   };
 
@@ -46,6 +52,10 @@ const Navbar = () => {
   const getUserDetailsFunc = async (userId) => {
     try {
       const response = await getUserDetails(userId);
+      if (response?.status === "ERROR") {
+        setUserDetails(null);
+        return;
+      }
       setUserDetails(response?.data);
     } catch (error) {
       setUserDetails(null);

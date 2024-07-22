@@ -6,6 +6,7 @@ import LoginPage from "./components/authentication/login-page";
 import UserDetailsSingupPage from "./components/authentication/user-details";
 import HomePage from "./components/Home";
 import ProtectedRoute from "./components/authentication/protecteRoutes";
+import { Toaster } from "./components/ui/toaster";
 
 function RoutesComponent() {
   return (
@@ -31,6 +32,7 @@ function App() {
   return (
     <BrowserRouter>
       <RoutesComponent />
+      <Toaster />
     </BrowserRouter>
   );
 }
