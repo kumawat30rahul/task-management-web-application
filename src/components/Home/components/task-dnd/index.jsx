@@ -2,7 +2,7 @@ import { CircularProgress, Grid } from "@mui/material";
 import TaskCard from "../task-card";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useEffect, useState } from "react";
-import { getAllTasks, updateTaskStatus } from "@/Config/services";
+import { getAllTasks, sortTasks, updateTaskStatus } from "@/Config/services";
 import { useToast } from "@/components/ui/use-toast";
 
 let initialData = {
@@ -34,6 +34,7 @@ const TaskDragAndDrop = ({
   setIsOpen,
   setTaskId,
   taskCardButtonLoaders,
+  tasksDetails,
 }) => {
   const [state, setState] = useState(initialData);
   const { toast } = useToast();
@@ -106,6 +107,44 @@ const TaskDragAndDrop = ({
     updatingStatus(draggableId, destination.droppableId);
   };
 
+  const settingDndData = (allTasks) => {
+    const allTaskData = allTasks?.reduce((acc, task) => {
+      acc[task?.taskId] = {
+        id: task?.taskId,
+        taskName: task?.taskName,
+        taskDescription: task?.taskDescription,
+        createdAt: task?.createdAt,
+        severity: task?.severity,
+        status: task?.taskStatus,
+        expiryDate: task?.expiryDate,
+      };
+      return acc;
+    }, {});
+
+    const sepearatedColumnId = seperatingTasks(allTasks);
+    const newInitialData = {
+      ...initialData,
+      tasks: allTaskData,
+      columns: {
+        ...initialData.columns,
+        TODO: {
+          ...initialData.columns.TODO,
+          taskIds: sepearatedColumnId.TODO,
+        },
+        INPROGRESS: {
+          ...initialData.columns.INPROGRESS,
+          taskIds: sepearatedColumnId.INPROGRESS,
+        },
+        CLOSED: {
+          ...initialData.columns.CLOSED,
+          taskIds: sepearatedColumnId.CLOSED,
+        },
+      },
+    };
+    initialData = newInitialData;
+    return newInitialData;
+  };
+
   const fetchingAllTasks = async () => {
     try {
       const response = await getAllTasks();
@@ -116,41 +155,8 @@ const TaskDragAndDrop = ({
         });
         return;
       }
-      const allTasks = response?.data?.reduce((acc, task) => {
-        acc[task?.taskId] = {
-          id: task?.taskId,
-          taskName: task?.taskName,
-          taskDescription: task?.taskDescription,
-          createdAt: task?.createdAt,
-          severity: task?.severity,
-          status: task?.taskStatus,
-          expiryDate: task?.expiryDate,
-        };
-        return acc;
-      }, {});
-
-      const sepearatedColumnId = seperatingTasks(response?.data);
-      const newInitialData = {
-        ...initialData,
-        tasks: allTasks,
-        columns: {
-          ...initialData.columns,
-          TODO: {
-            ...initialData.columns.TODO,
-            taskIds: sepearatedColumnId.TODO,
-          },
-          INPROGRESS: {
-            ...initialData.columns.INPROGRESS,
-            taskIds: sepearatedColumnId.INPROGRESS,
-          },
-          CLOSED: {
-            ...initialData.columns.CLOSED,
-            taskIds: sepearatedColumnId.CLOSED,
-          },
-        },
-      };
-      initialData = newInitialData;
-      setState(newInitialData);
+      const newData = settingDndData(response?.data);
+      setState(newData);
       setFetchTasksAgain(false);
     } catch (error) {
       toast({
@@ -216,6 +222,35 @@ const TaskDragAndDrop = ({
       });
     }
   };
+
+  const sortingFunction = async () => {
+    try {
+      const payload = {
+        sort: tasksDetails?.sort,
+      };
+      const response = await sortTasks(payload);
+      if (response.status === "ERROR") {
+        toast({
+          variant: "destructive",
+          title: response?.message,
+        });
+        return;
+      }
+      const newData = settingDndData(response?.data);
+      setState(newData);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: error?.message,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (tasksDetails?.sort) {
+      sortingFunction();
+    }
+  }, [tasksDetails?.sort]);
 
   useEffect(() => {
     fetchingAllTasks();

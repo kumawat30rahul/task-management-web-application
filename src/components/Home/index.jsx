@@ -35,10 +35,9 @@ const HomePage = () => {
   });
 
   const sortingOptions = [
-    { value: "recent", label: "Recent" },
-    { value: "today", label: "Today" },
-    { value: "yesterday", label: "Yesterday" },
-    { value: "prevWeek", label: "Last Week" },
+    { value: "Low", label: "Low" },
+    { value: "Medium", label: "Medium" },
+    { value: "High", label: "High" },
   ];
 
   const severityOptions = [
@@ -352,12 +351,14 @@ const HomePage = () => {
               </div>
             </SearchSheet>
           </div>
-          {/* <div>
+          <div>
             <SelectCommon
               defaultPlaceHolder="Sort By"
               options={sortingOptions}
+              selectLabel={"Sort By Severity"}
+              setTasksDetails={setTasksDetails}
             />
-          </div> */}
+          </div>
         </div>
         <Separator orientation="horizontal" className="mt-10 sm:mt-0" />
         <TaskDragAndDrop
@@ -367,6 +368,7 @@ const HomePage = () => {
           setIsOpen={setIsOpen}
           setTaskId={setTaskId}
           taskCardButtonLoaders={taskCardButtonLoaders}
+          tasksDetails={tasksDetails}
         />
       </div>
     </>

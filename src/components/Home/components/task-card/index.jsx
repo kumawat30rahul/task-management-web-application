@@ -24,8 +24,6 @@ const TaskCard = ({
     // setIsOpen(true);
   };
 
-  console.log(taskCardButtonLoaders);
-
   return (
     <div
       className={`w-full border  border-t-8  p-2 rounded-lg cursor-pointer hover:scale-105 transition-all duration-200 bg-white ${

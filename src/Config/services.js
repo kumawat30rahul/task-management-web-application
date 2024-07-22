@@ -8,9 +8,6 @@ import {
 
 let envBaseUrl = config[import.meta.env.VITE_MY_ENV].backendUrl;
 
-console.log(import.meta.env.VITE_MY_ENV);
-console.log(envBaseUrl);
-
 const serviceList = {
   user: "/user",
   task: "/task",
@@ -69,4 +66,9 @@ export const deleteTask = async (taskId) => {
 export const searchTasks = async (searchQuery) => {
   const url = envBaseUrl + serviceList.task + `/search?taskName=${searchQuery}`;
   return getRequest(url);
+};
+
+export const sortTasks = async (payload) => {
+  const url = envBaseUrl + serviceList.task + `/sort`;
+  return postRequest(url, payload);
 };

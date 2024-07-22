@@ -231,7 +231,7 @@ const TaskRouteHandler = {
   },
 
   async sortTask(req, res) {
-    const { sort } = req.params;
+    const { sort } = req.body;
     console.log({ sort });
     try {
       const response = await TaskManager.sortTask(sort);

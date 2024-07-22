@@ -1,6 +1,7 @@
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -11,11 +12,12 @@ const SelectCommon = ({
   setTasksDetails,
   defaultPlaceHolder,
   tasksDetails,
+  selectLabel,
 }) => {
   const handleChange = (value) => {
     setTasksDetails((prev) => ({
       ...prev,
-      taskSeverity: value,
+      sort: value,
     }));
   };
 
@@ -29,11 +31,13 @@ const SelectCommon = ({
           <SelectValue placeholder={defaultPlaceHolder} />
         </SelectTrigger>
         <SelectContent>
-          {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
+          <SelectGroup label={selectLabel}>
+            {options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectGroup>
         </SelectContent>
       </Select>
     </div>
