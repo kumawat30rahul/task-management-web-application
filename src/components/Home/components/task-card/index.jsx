@@ -10,6 +10,7 @@ const TaskCard = ({
   setTaskType,
   setIsOpen,
   setTaskId,
+  taskCardButtonLoaders,
 }) => {
   const taskCardButtonHandler = (type, taskId) => {
     if (type === "Delete") {
@@ -22,6 +23,8 @@ const TaskCard = ({
     setTaskId(taskId);
     // setIsOpen(true);
   };
+
+  console.log(taskCardButtonLoaders);
 
   return (
     <div
@@ -73,19 +76,46 @@ const TaskCard = ({
               className="bg-red-500 px-2 h-8"
               onClick={() => taskCardButtonHandler("Delete", task?.id)}
             >
-              Delete
+              {taskCardButtonLoaders?.loader &&
+              task?.id === taskCardButtonLoaders?.taskId &&
+              taskCardButtonLoaders.taskType === "Delete" ? (
+                <CircularProgress
+                  sx={{ color: "white !important" }}
+                  size={18}
+                />
+              ) : (
+                "Delete"
+              )}
             </Button>
             <Button
               className="bg-blue-500 px-2 h-8"
               onClick={() => taskCardButtonHandler("Edit", task?.id)}
             >
-              Edit
+              {taskCardButtonLoaders?.loader &&
+              task?.id === taskCardButtonLoaders?.taskId &&
+              taskCardButtonLoaders.taskType === "Edit" ? (
+                <CircularProgress
+                  sx={{ color: "white !important" }}
+                  size={18}
+                />
+              ) : (
+                "Edit"
+              )}
             </Button>
             <Button
               className="bg-blue-700 px-2 h-8"
               onClick={() => taskCardButtonHandler("View", task?.id)}
             >
-              view
+              {taskCardButtonLoaders?.loader &&
+              task?.id === taskCardButtonLoaders?.taskId &&
+              taskCardButtonLoaders.taskType === "View" ? (
+                <CircularProgress
+                  sx={{ color: "white !important" }}
+                  size={18}
+                />
+              ) : (
+                "View"
+              )}
             </Button>
           </div>
         </>

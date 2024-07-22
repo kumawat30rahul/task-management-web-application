@@ -28,6 +28,11 @@ const HomePage = () => {
   const [fetchTasksAgain, setFetchTasksAgain] = useState(false);
   const [taskType, setTaskType] = useState("");
   const { userName } = userDetails;
+  const [taskCardButtonLoaders, setTaskCardButtonLoaders] = useState({
+    loader: false,
+    taskType: "",
+    taskId: "",
+  });
 
   const sortingOptions = [
     { value: "recent", label: "Recent" },
@@ -204,6 +209,11 @@ const HomePage = () => {
   };
 
   const getTasksByIdFunction = async (taskId) => {
+    setTaskCardButtonLoaders({
+      loader: true,
+      taskType: taskType,
+      taskId: taskId,
+    });
     try {
       const response = await getTaskById(taskId);
       if (response.status === "ERROR") {
@@ -223,10 +233,20 @@ const HomePage = () => {
         taskStatus: res?.taskStatus,
       });
       setIsOpen(true);
+      setTaskCardButtonLoaders({
+        loader: false,
+        taskType: "",
+        taskId: "",
+      });
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Failed to fetch task details",
+      });
+      setTaskCardButtonLoaders({
+        loader: false,
+        taskType: "",
+        taskId: "",
       });
     }
   };
@@ -346,6 +366,7 @@ const HomePage = () => {
           setTaskType={setTaskType}
           setIsOpen={setIsOpen}
           setTaskId={setTaskId}
+          taskCardButtonLoaders={taskCardButtonLoaders}
         />
       </div>
     </>

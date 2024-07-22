@@ -33,6 +33,7 @@ const TaskDragAndDrop = ({
   setTaskType,
   setIsOpen,
   setTaskId,
+  taskCardButtonLoaders,
 }) => {
   const [state, setState] = useState(initialData);
   const { toast } = useToast();
@@ -268,6 +269,9 @@ const TaskDragAndDrop = ({
                                       setTaskType={setTaskType}
                                       setIsOpen={setIsOpen}
                                       setTaskId={setTaskId}
+                                      taskCardButtonLoaders={
+                                        taskCardButtonLoaders
+                                      }
                                     />
                                   </div>
                                 );
