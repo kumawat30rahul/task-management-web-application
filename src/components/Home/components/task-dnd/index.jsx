@@ -273,7 +273,7 @@ const TaskDragAndDrop = ({
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="w-full mt-8 h-[600px]">
+        <div className="w-full mt-8 h-[400px] md:h-[600px]">
           {fetchTasksAgain ? (
             <div className="h-24 w-full flex items-center justify-center">
               <CircularProgress />
