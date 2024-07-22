@@ -287,8 +287,11 @@ const HomePage = () => {
   };
 
   const deleteTaskFunction = async () => {
+    const payload = {
+      taskId,
+    };
     try {
-      const response = await deleteTask(taskId);
+      const response = await deleteTask(payload);
       if (response?.status === "ERROR") {
         toast({
           variant: "destructive",

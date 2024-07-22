@@ -1,10 +1,5 @@
 import config from "./config";
-import {
-  deleteRequest,
-  getRequest,
-  patchRequest,
-  postRequest,
-} from "./servicesHeaders";
+import { getRequest, patchRequest, postRequest } from "./servicesHeaders";
 
 let envBaseUrl = config[import.meta.env.VITE_MY_ENV].backendUrl;
 
@@ -58,9 +53,9 @@ export const getUserDetails = async (userId) => {
   return getRequest(url);
 };
 
-export const deleteTask = async (taskId) => {
-  const url = envBaseUrl + serviceList.task + `/delete/${taskId}`;
-  return deleteRequest(url);
+export const deleteTask = async (payload) => {
+  const url = envBaseUrl + serviceList.task + `/delete`;
+  return postRequest(url, payload);
 };
 
 export const searchTasks = async (searchQuery) => {

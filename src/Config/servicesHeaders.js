@@ -97,20 +97,20 @@ export const patchRequest = async (url, data) => {
   });
 };
 
-export const deleteRequest = async (url, data) => {
-  const access_token = localStorage.getItem("access_token");
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(url, data, { headers: { ...deleteHeaders, access_token } })
-      .then((response) => {
-        resolve(response.data);
-        if (response?.data?.message === "Unauthorized Access_token") {
-          localStorage.clear();
-          window.location.href = "/";
-        }
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-};
+// export const deleteRequest = async (url, data) => {
+//   const access_token = localStorage.getItem("access_token");
+//   return new Promise((resolve, reject) => {
+//     axios
+//       .delete(url, data, { headers: { ...patchHeaders, access_token } })
+//       .then((response) => {
+//         resolve(response.data);
+//         if (response?.data?.message === "Unauthorized Access_token") {
+//           localStorage.clear();
+//           window.location.href = "/";
+//         }
+//       })
+//       .catch((error) => {
+//         reject(error);
+//       });
+//   });
+// };

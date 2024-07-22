@@ -11,7 +11,7 @@ taskRouter.post("/create", isAuth, TaskRouteHandler.createTask);
 taskRouter.patch("/edit", isAuth, TaskRouteHandler.editingTask);
 
 //deleting task
-taskRouter.delete("/delete/:taskId", isAuth, TaskRouteHandler.deletingTask);
+taskRouter.post("/delete", isAuth, TaskRouteHandler.deletingTask);
 
 //changing status of task
 taskRouter.patch("/update-status", isAuth, TaskRouteHandler.changingStatus);

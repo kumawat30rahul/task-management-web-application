@@ -62,7 +62,7 @@ const TaskRouteHandler = {
   },
 
   async deletingTask(req, res) {
-    const { taskId } = req.params;
+    const { taskId } = req.body;
     if (!taskId) {
       return res.send(
         createErrorResponse({
