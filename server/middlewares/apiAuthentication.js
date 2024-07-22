@@ -5,7 +5,13 @@ const isAuth = (req, res, next) => {
   const token = req.headers["access_token"];
 
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    return res.send(
+      createErrorResponse({
+        statusCode: 401,
+        message: "No token provided",
+        status: "ERROR",
+      })
+    );
   }
 
   jwt.verify(token, process.env.AT_SCECRET_KEY, (err, decoded) => {

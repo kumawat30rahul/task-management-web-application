@@ -29,7 +29,7 @@ const UserRouteHandler = {
         createErrorResponse({
           statusCode: 500,
           message: "Failed to create user",
-          status: "FAILED",
+          status: "ERROR",
           error: error,
         })
       );
