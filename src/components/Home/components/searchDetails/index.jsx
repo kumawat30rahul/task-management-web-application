@@ -16,7 +16,12 @@ import { useDebounceValue } from "usehooks-ts";
 import TaskCard from "../task-card";
 import { CircularProgress } from "@mui/material";
 
-export function SearchSheet({ children, setTaskType, setTaskId }) {
+export function SearchSheet({
+  children,
+  setTaskType,
+  setTaskId,
+  taskCardButtonLoaders,
+}) {
   const [searchedValue, setSearchedValue] = useState(null);
   const [taskDetails, setTaskDetails] = useState();
   const [debouncedValue, setValue] = useDebounceValue(searchedValue, 500);
@@ -27,7 +32,6 @@ export function SearchSheet({ children, setTaskType, setTaskId }) {
       setSearchLoader(true);
       searchTasks(debouncedValue)
         .then((response) => {
-          console.log(response);
           const data = response?.data?.map((task) => ({
             id: task?.taskId,
             taskName: task?.taskName,
@@ -58,25 +62,28 @@ export function SearchSheet({ children, setTaskType, setTaskId }) {
               onChange={(e) => setSearchedValue(e.target.value)}
             />
           </div>
-          <div className="flex flex-col items-start gap-3">
-            {taskDetails?.length === 0 && (
-              <div>
-                <span>No Results Found</span>
-              </div>
-            )}
-            {searchLoader ? (
-              <div className="h-20 flex items-center justify-center w-full">
-                <CircularProgress />
-              </div>
-            ) : (
-              taskDetails?.map((task) => (
-                <TaskCard
-                  task={task}
-                  setTaskType={setTaskType}
-                  setTaskId={setTaskId}
-                />
-              ))
-            )}
+          <div className="h-screen w-full">
+            <div className="flex flex-col items-start gap-3 h-5/6 overflow-y-scroll w-full p-1">
+              {taskDetails?.length === 0 && (
+                <div>
+                  <span>No Results Found</span>
+                </div>
+              )}
+              {searchLoader ? (
+                <div className="h-20 flex items-center justify-center w-full">
+                  <CircularProgress />
+                </div>
+              ) : (
+                taskDetails?.map((task) => (
+                  <TaskCard
+                    task={task}
+                    setTaskType={setTaskType}
+                    setTaskId={setTaskId}
+                    taskCardButtonLoaders={taskCardButtonLoaders}
+                  />
+                ))
+              )}
+            </div>
           </div>
         </SheetHeader>
       </SheetContent>

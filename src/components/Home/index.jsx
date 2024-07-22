@@ -343,7 +343,11 @@ const HomePage = () => {
         </div>
         <div className="h-14 w-full rounded-full flex flex-col gap-2 sm:flex-row sm:items-center justify-between">
           <div className="w-full sm:w-2/4 lg:w-1/4 rounded-lg">
-            <SearchSheet setTaskType={setTaskType} setTaskId={setTaskId}>
+            <SearchSheet
+              setTaskType={setTaskType}
+              setTaskId={setTaskId}
+              taskCardButtonLoaders={taskCardButtonLoaders}
+            >
               <div>
                 <Input
                   className="rounded-lg w-full"
