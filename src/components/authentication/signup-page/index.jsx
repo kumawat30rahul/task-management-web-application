@@ -209,19 +209,6 @@ const SignUpPage = () => {
           </Button>
         </div>
 
-        <div className="flex flex-col items-center justify-start gap-3">
-          <span className="text-sm">- or Continue With -</span>
-          <div className="-5">
-            <Button className="w-full flex items-center justify-center rounded-full bg-white text-black border border-gray-500 hover:bg-gray-500/20 text-md">
-              <img
-                src="https://cdn1.iconfinder.com/data/icons/google-s-logo/150/Google_Icons-09-512.png"
-                alt="google"
-                className="h-5 w-5"
-              />
-              Google
-            </Button>
-          </div>
-        </div>
         <div>
           <span className="text-sm">
             Already have an account?{" "}
