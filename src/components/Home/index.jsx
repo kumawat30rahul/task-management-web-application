@@ -122,6 +122,7 @@ const HomePage = () => {
                 options={severityOptions}
                 setTasksDetails={setTasksDetails}
                 tasksDetails={tasksDetails}
+                isCreateTask={true}
               />
             </div>
             <div className="w-full">

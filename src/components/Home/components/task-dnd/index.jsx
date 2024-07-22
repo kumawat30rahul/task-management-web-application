@@ -42,6 +42,7 @@ const TaskDragAndDrop = ({
     loader: false,
     taksId: "",
   });
+  const [fetchAllTasksLoader, setFetchAllTasksLoader] = useState(false);
   const onDragEnd = (result) => {
     const { destination, source, draggableId } = result;
 
@@ -146,6 +147,7 @@ const TaskDragAndDrop = ({
   };
 
   const fetchingAllTasks = async () => {
+    setFetchAllTasksLoader(true);
     try {
       const response = await getAllTasks();
       if (response.status === "ERROR") {
@@ -153,17 +155,20 @@ const TaskDragAndDrop = ({
           variant: "destructive",
           title: response?.message,
         });
+        setFetchAllTasksLoader(false);
         return;
       }
       const newData = settingDndData(response?.data);
       setState(newData);
       setFetchTasksAgain(false);
+      setFetchAllTasksLoader(false);
     } catch (error) {
       toast({
         variant: "destructive",
         title: error?.message,
       });
       setFetchTasksAgain(false);
+      setFetchAllTasksLoader(false);
     }
   };
 
@@ -224,6 +229,8 @@ const TaskDragAndDrop = ({
   };
 
   const sortingFunction = async () => {
+    setFetchAllTasksLoader(true);
+
     try {
       const payload = {
         sort: tasksDetails?.sort,
@@ -236,13 +243,16 @@ const TaskDragAndDrop = ({
         });
         return;
       }
+
       const newData = settingDndData(response?.data);
       setState(newData);
+      setFetchAllTasksLoader(false);
     } catch (error) {
       toast({
         variant: "destructive",
         title: error?.message,
       });
+      setFetchAllTasksLoader(false);
     }
   };
 
@@ -256,74 +266,81 @@ const TaskDragAndDrop = ({
     fetchingAllTasks();
   }, [fetchTasksAgain]);
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="w-full mt-8 h-[600px]">
-        {fetchTasksAgain ? (
-          <div className="h-24 w-full flex items-center justify-center">
-            <CircularProgress />
-          </div>
-        ) : (
-          <Grid container spacing={2} className="h-full">
-            {state.columnOrder.map((columnId) => {
-              const column = state.columns[columnId];
-              const tasks = column?.taskIds?.map(
-                (taskId) => state.tasks[taskId]
-              );
-              return (
-                <Grid item lg={4} md={6} sm={12} xs={12} className="h-full">
-                  <div className="flex flex-col items-center justify-start gap-2 border border-gray-500 bg-gray-500/20 h-full">
-                    <span className="h-auto w-full bg-blue-500 text-center text-white font-bold">
-                      {column?.title}
-                    </span>
-                    <Droppable droppableId={column?.id}>
-                      {(provided, snapshot) => (
-                        <div
-                          className="p-4 w-full flex flex-col gap-2 h-full  overflow-y-scroll"
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                        >
-                          {tasks?.map((task, index) => (
-                            <Draggable
-                              draggableId={`${task.id}`}
-                              index={index}
-                              key={task.id}
-                            >
-                              {(provided, snapshot) => {
-                                return (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    key={task.id}
-                                  >
-                                    <TaskCard
-                                      task={task}
-                                      updateTaskStatusLoader={
-                                        updateTaskStatusLoader
-                                      }
-                                      setTaskType={setTaskType}
-                                      setIsOpen={setIsOpen}
-                                      setTaskId={setTaskId}
-                                      taskCardButtonLoaders={
-                                        taskCardButtonLoaders
-                                      }
-                                    />
-                                  </div>
-                                );
-                              }}
-                            </Draggable>
-                          ))}
-                        </div>
-                      )}
-                    </Droppable>
-                  </div>
-                </Grid>
-              );
-            })}
-          </Grid>
-        )}
+    <>
+      <div className="flex items-center gap-2">
+        <span className="text-lg font-bold">All Tasks</span>
+        {fetchAllTasksLoader && <CircularProgress size={20} />}
       </div>
-    </DragDropContext>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="w-full mt-8 h-[600px]">
+          {fetchTasksAgain ? (
+            <div className="h-24 w-full flex items-center justify-center">
+              <CircularProgress />
+            </div>
+          ) : (
+            <Grid container spacing={2} className="h-full">
+              {state.columnOrder.map((columnId) => {
+                const column = state.columns[columnId];
+                const tasks = column?.taskIds?.map(
+                  (taskId) => state.tasks[taskId]
+                );
+                return (
+                  <Grid item lg={4} md={6} sm={12} xs={12} className="h-full">
+                    <div className="flex flex-col items-center justify-start gap-2 border border-gray-500 bg-gray-500/20 h-full">
+                      <span className="h-auto w-full bg-blue-500 text-center text-white font-bold">
+                        {column?.title}
+                      </span>
+                      <Droppable droppableId={column?.id}>
+                        {(provided, snapshot) => (
+                          <div
+                            className="p-4 w-full flex flex-col gap-2 h-full  overflow-y-scroll"
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            {tasks?.map((task, index) => (
+                              <Draggable
+                                draggableId={`${task.id}`}
+                                index={index}
+                                key={task.id}
+                              >
+                                {(provided, snapshot) => {
+                                  return (
+                                    <div
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      key={task.id}
+                                    >
+                                      <TaskCard
+                                        task={task}
+                                        updateTaskStatusLoader={
+                                          updateTaskStatusLoader
+                                        }
+                                        setTaskType={setTaskType}
+                                        setIsOpen={setIsOpen}
+                                        setTaskId={setTaskId}
+                                        taskCardButtonLoaders={
+                                          taskCardButtonLoaders
+                                        }
+                                      />
+                                    </div>
+                                  );
+                                }}
+                              </Draggable>
+                            ))}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
+                  </Grid>
+                );
+              })}
+            </Grid>
+          )}
+        </div>
+      </DragDropContext>
+    </>
   );
 };
 

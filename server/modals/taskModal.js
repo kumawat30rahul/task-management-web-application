@@ -14,7 +14,7 @@ const taskSchema = new mongoose.Schema({
   },
   severity: {
     type: String,
-    default: "LOW",
+    default: "Low",
   },
   taskStatus: {
     type: String,

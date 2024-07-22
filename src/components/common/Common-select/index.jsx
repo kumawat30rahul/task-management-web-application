@@ -13,12 +13,20 @@ const SelectCommon = ({
   defaultPlaceHolder,
   tasksDetails,
   selectLabel,
+  isCreateTask = false,
 }) => {
   const handleChange = (value) => {
-    setTasksDetails((prev) => ({
-      ...prev,
-      sort: value,
-    }));
+    if (!isCreateTask) {
+      setTasksDetails((prev) => ({
+        ...prev,
+        sort: value,
+      }));
+    } else {
+      setTasksDetails((prev) => ({
+        ...prev,
+        taskSeverity: value,
+      }));
+    }
   };
 
   return (
