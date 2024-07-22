@@ -110,14 +110,40 @@ const TaskManager = {
     }
   },
 
-  // async sortTask(sort) {
-  //   try {
-  //     const task = await Task.find().sort({ createdAt: sort });
-  //     return Promise.resolve(task);
-  //   } catch (error) {
-  //     return Promise.reject(error);
-  //   }
-  // }
+  async sortTask(sort) {
+    try {
+      const tasks = await Task.find();
+      let severityOrder = {
+        Low: 1,
+        Medium: 2,
+        High: 3,
+      };
+      if (sort === "Medium") {
+        severityOrder = {
+          Low: 1,
+          Medium: 3,
+          High: 2,
+        };
+      }
+
+      tasks.sort((a, b) => {
+        const severityA = severityOrder[a.severity]; // get the order of severity
+        const severityB = severityOrder[b.severity]; // get the order of severity
+
+        if (severityA < severityB) {
+          return sort === "Low" ? -1 : 1; // sort in ascending order
+        }
+        if (severityA > severityB) {
+          return sort === "Low" ? 1 : -1; // sort in descending order
+        }
+        return 0;
+      });
+
+      return Promise.resolve(tasks);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  },
 };
 
 module.exports = TaskManager;

@@ -230,31 +230,32 @@ const TaskRouteHandler = {
     }
   },
 
-  // async sortTask(req, res) {
-  //   const { sort } = req.params;
-  //   try {
-  //     const response = await TaskManager.sortTask(sort);
-  //     if (response) {
-  //       return res.send(
-  //         createSuccessResponse({
-  //           statusCode: 200,
-  //           message: "Successfully Fetched Task",
-  //           status: "SUCCESS",
-  //           data: response,
-  //         })
-  //       );
-  //     }
-  //   } catch (error) {
-  //     return res.send(
-  //       createConnectionErrorResponse({
-  //         statusCode: 500,
-  //         message: "Something Went wrong while fetching task",
-  //         status: "ERROR",
-  //         error: error,
-  //       })
-  //     );
-  //   }
-  // },
+  async sortTask(req, res) {
+    const { sort } = req.params;
+    console.log({ sort });
+    try {
+      const response = await TaskManager.sortTask(sort);
+      if (response) {
+        return res.send(
+          createSuccessResponse({
+            statusCode: 200,
+            message: "Successfully Fetched Task",
+            status: "SUCCESS",
+            data: response,
+          })
+        );
+      }
+    } catch (error) {
+      return res.send(
+        createConnectionErrorResponse({
+          statusCode: 500,
+          message: "Something Went wrong while fetching task",
+          status: "ERROR",
+          error: error,
+        })
+      );
+    }
+  },
 };
 
 module.exports = TaskRouteHandler;
